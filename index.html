@@ -16,7 +16,9 @@
 <link rel="icon" href="icons/icon-192.png?v=3" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=3">
 <style>
-:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{color-scheme:light}
+html,body{min-height:100%}
+html{background:var(--bg)}
 body{margin:0} img{max-width:100%} [hidden]{display:none!important}
 </style>
 <style>
@@ -174,6 +176,23 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .hours label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
 .hours input{font:600 16px var(--font);padding:8px;border-radius:10px;border:0;background:var(--surface2);color:var(--ink);width:100%;-webkit-appearance:none;appearance:none;min-height:40px}
 .hero{text-align:center;padding:28px 20px}
+/* Pantallas bajas: el reproductor se compacta para que siempre se vean los controles */
+@media (max-height:760px){
+  .bring{width:min(66vw,280px);height:min(66vw,280px)}
+  .bring .sec{font-size:72px}
+  .stage{gap:10px}
+  .pctl{gap:28px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  .pctl button{width:54px;height:54px}.pctl button.main{width:72px;height:72px}
+  .pphoto{width:min(72vw,300px)}
+  .stage.img .bring{width:min(36vw,150px);height:min(36vw,150px)}
+  .stage.img .bring .sec{font-size:44px}
+  .cue{font-size:15px;min-height:0}
+}
+.install{display:flex;gap:12px;align-items:flex-start;background:var(--accent-soft);border-radius:16px;padding:14px 16px;margin-bottom:14px}
+.install svg.i{color:var(--accent);flex:0 0 auto}
+.install p{margin:0;font-size:15px}
+.install ol{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
+.install button{margin-left:auto;color:var(--muted);padding:2px}
 .hero .big{width:84px;height:84px;border-radius:24px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin:0 auto 14px}
 .hero .big svg.i{width:44px;height:44px}
 .hero h2{margin:0 0 6px;font-size:22px;letter-spacing:-.02em}
@@ -186,7 +205,7 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .seg button[aria-pressed="true"]{background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 
 /* Overlays (hoja inferior, pantalla completa) */
-.ov{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;background:var(--bg);transform:translateY(102%);transition:transform .38s cubic-bezier(.32,.72,0,1);visibility:hidden}
+.ov{position:fixed;top:0;left:0;right:0;height:100vh;height:100dvh;z-index:50;display:flex;flex-direction:column;background:var(--bg);transform:translateY(102%);transition:transform .38s cubic-bezier(.32,.72,0,1);visibility:hidden}
 .ov.open{transform:none;visibility:visible}
 .ov .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:0 16px}
 .ovbar{display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px}
@@ -707,9 +726,16 @@ function checkReminders(){
 }
 setInterval(checkReminders,30000);
 document.addEventListener('visibilitychange',function(){if(!document.hidden){if(!$('#s-hoy').hidden)renderHoy();checkReminders()}});
+var IS_IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+var IS_APP=window.navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches);
+if(IS_APP)document.documentElement.classList.add('standalone');
+function installCard(){
+  if(IS_APP||store.get('hideInstall',false))return '';
+  return '<div class="install">'+ico('today')+'<div><p><b>Instálala a pantalla completa</b></p><ol>'+(IS_IOS?'<li>Toca <b>Compartir</b> (cuadrado con flecha) en Safari</li><li>Elige <b>Agregar a pantalla de inicio</b></li><li>Deja activado <b>Abrir como app web</b> y toca <b>Agregar</b></li>':'<li>En el menú del navegador elige <b>Instalar app</b> o <b>Agregar a pantalla de inicio</b></li>')+'</ol></div><button id="hideInstall" aria-label="Ocultar">'+ico('x')+'</button></div>';
+}
 function renderHoy(){
-  var box=$('#hoyBody');
-  if(!st.level){box.innerHTML='<div class="card hero"><div class="big">'+ico('gauge')+'</div><h2>Empieza por tu evaluación</h2><p>10 minutos para medir fuerza, velocidad y resistencia. Con eso la app arma tus sesiones diarias.</p><button class="btn press" id="goEval">Evaluarme ahora</button></div>';$('#goEval').onclick=openWizard;return}
+  var box=$('#hoyBody');var inst=installCard();
+  if(!st.level){box.innerHTML=inst+'<div class="card hero"><div class="big">'+ico('gauge')+'</div><h2>Empieza por tu evaluación</h2><p>10 minutos para medir fuerza, velocidad y resistencia. Con eso la app arma tus sesiones diarias.</p><button class="btn press" id="goEval">Evaluarme ahora</button></div>';$('#goEval').onclick=openWizard;return}
   var L=LV[st.level],today=st.log[dkey()]||[],dl=daysBetween(st.levelSince,dkey()),adh=adherence(),n=today.length,pct=Math.min(1,n/L.perDay);
   var easy=st.rpe.slice(-6).filter(function(r){return r===1}).length,hard=st.rpe.slice(-4).filter(function(r){return r===3}).length,adv='';
   if(dl>=14&&adh>=70)adv='<div class="banner">'+ico('redo')+'<div><p><b>Toca reevaluarte.</b> Llevas '+dl+' días en este nivel con '+adh+'% de sesiones hechas.</p><button class="btn warm press" data-a="re">Reevaluar</button></div></div>';
@@ -717,7 +743,7 @@ function renderHoy(){
   else if(hard>=4)adv='<div class="banner">'+ico('alert')+'<div><p><b>Se te está haciendo pesado.</b> Si terminas con dolor o no logras soltar el músculo, baja un nivel.</p>'+(st.level>1?'<button class="btn warm press" data-a="down">Bajar a '+LV[st.level-1].n+'</button>':'')+'</div></div>';
   if(!st.abs)st.abs={};if(!st.start)st.start=st.evals.length?st.evals[0].date:dkey();var absToday=!!st.abs[dkey()];
   var mins=Math.round(total(build(st.level,0))/60),fastN=L.fast+(st.peFocus?5:0),C=339.3;
-  box.innerHTML=remindCard()+'<div class="card"><div class="summary"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent-soft)" stroke-width="13"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="13" stroke-linecap="round" stroke-dasharray="314.2" stroke-dashoffset="'+(314.2*(1-pct)).toFixed(1)+'" style="transition:stroke-dashoffset .8s cubic-bezier(.32,.72,0,1)"/></svg><div class="in"><b class="num">'+n+'/'+L.perDay+'</b><span>sesiones</span></div></div>'+
+  box.innerHTML=inst+remindCard()+'<div class="card"><div class="summary"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent-soft)" stroke-width="13"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="13" stroke-linecap="round" stroke-dasharray="314.2" stroke-dashoffset="'+(314.2*(1-pct)).toFixed(1)+'" style="transition:stroke-dashoffset .8s cubic-bezier(.32,.72,0,1)"/></svg><div class="in"><b class="num">'+n+'/'+L.perDay+'</b><span>sesiones</span></div></div>'+
    '<div><div class="lvbadge"><i>'+st.level+'</i>'+L.n+'</div><div class="kv" style="margin-top:10px"><div><span>Racha</span><b class="num">'+streak()+' <small>días</small></b></div><div><span>Constancia</span><b class="num">'+adh+'<small>%</small></b></div><div><span>En el nivel</span><b class="num">'+(dl+1)+' <small>días</small></b></div><div><span>Por sesión</span><b class="num">'+mins+' <small>min</small></b></div></div></div></div>'+nextCard()+'</div>'+adv+
    '<div class="hdr">Sesiones de hoy</div><div class="group">'+SLOTS.slice(0,L.perDay).map(function(s,i){var d=today.indexOf(i)>=0;return '<div class="rowi press" data-s="'+i+'" role="button" tabindex="0"><span class="ic" style="background:'+s[2]+'">'+ico(s[1])+'</span><div class="t"><b>'+s[0]+'</b><span>'+L.pos[i]+' · '+mins+' min'+(d?' · hecha':'')+'</span></div><button class="check'+(d?' on':'')+'" data-c="'+i+'" aria-label="Marcar '+s[0]+' como hecha">'+ico('check')+'</button></div>'}).join('')+'</div>'+
    '<p class="foot">Toca una sesión para hacerla guiada. Si la hiciste sin la app, toca el círculo.</p>'+
@@ -935,6 +961,7 @@ var armed=false;$('#resetBtn').onclick=function(){if(!armed){armed=true;$('#rese
   st={level:0,evals:[],log:{},rpe:[],start:null};save();armed=false;$('#resetTxt').textContent='Borrar mis datos';toast('Datos borrados');showTab('hoy')};
 
 /* ---------- Inicio ---------- */
+$('#hoyBody').addEventListener('click',function(e){if(e.target.closest('#hideInstall')){store.set('hideInstall',true);renderHoy()}});
 renderEx();renderHoy();setTimeout(checkReminders,1500);
 showTab(st.level?store.get('tab3','hoy'):'hoy');
 })();
