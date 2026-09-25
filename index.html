@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Piso Pélvico Fuerte</title>
 <meta name="description" content="Entrenamiento del piso pélvico masculino: evaluación, sesiones guiadas y progresión por niveles.">
 <meta name="theme-color" content="#F2F3F5" media="(prefers-color-scheme: light)">
@@ -17,7 +17,8 @@
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=3">
 <style>
 :root{color-scheme:light}
-html,body{min-height:100%}
+html,body{min-height:100%;max-width:100%;overflow-x:hidden}
+html{touch-action:manipulation}
 html{background:var(--bg)}
 body{margin:0} img{max-width:100%} [hidden]{display:none!important}
 </style>
@@ -269,6 +270,8 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 20px;min-height:0}
 .bring{position:relative;width:min(76vw,330px);height:min(76vw,330px);max-height:42vh;max-width:42vh}
 .bring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.bring svg circle{transition:stroke .35s ease}
+#arc{transition:stroke .35s ease}
 .bring .orb{position:absolute;inset:18%;border-radius:50%;background:radial-gradient(circle at 50% 40%,var(--c,#2FD3C1),transparent 70%);opacity:.22;transform:scale(.6);transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1)}
 .bring .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .bring .ph{font:700 30px var(--round);letter-spacing:-.01em}
@@ -425,7 +428,7 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
     <div class="stage" id="stage"><div class="pphoto" id="pphoto" hidden></div>
       <div class="bring">
         <div class="orb" id="orb"></div>
-        <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="7"/><circle id="arc" cx="60" cy="60" r="54" fill="none" stroke="#2FD3C1" stroke-width="7" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0"/></svg>
+        <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="7"/><circle id="arc" cx="60" cy="60" r="54" fill="none" stroke="#2FD3C1" stroke-width="7" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0"/><circle id="knob" cx="114" cy="60" r="5.2" fill="#FFFFFF"/></svg>
         <div class="in"><div class="ph" id="ph">Listo</div><div class="sec" id="sec">—</div><div class="info" id="info">&nbsp;</div></div>
       </div>
       <p class="cue" id="cue">Toca play para empezar.</p>
@@ -849,7 +852,7 @@ function bindHold(){
 }
 function bindFast(){$('#cdGo').onclick=function(){unlockAudio();var g=this,n=3;g.disabled=true;clearInterval(cdIv);
   cdIv=setInterval(function(){if(n>0){$('#cdN').textContent=n;g.textContent='Prepárate…';beep(620,.08);n--;return}clearInterval(cdIv);beep(880,.3);haptic(20);g.textContent='¡Aprieta!';var t0=Date.now();
-    cdIv=setInterval(function(){var el=(Date.now()-t0)/1000,l=Math.max(0,10-el);$('#cdN').textContent=Math.ceil(l);$('#cdArc').style.strokeDashoffset=(326.7*el/10).toFixed(1);if(l<=0){clearInterval(cdIv);beep(440,.5);haptic([20,60,20]);$('#cdN').textContent='✓';g.textContent='Repetir';g.disabled=false}},50)},1000)}}
+    var arcEl=$('#cdArc'),numEl=$('#cdN'),last=null;(function f(){if(!document.body.contains(arcEl))return;var el=(Date.now()-t0)/1000,l=Math.max(0,10-el),n=Math.ceil(l);if(n!==last){last=n;numEl.textContent=n}arcEl.style.strokeDashoffset=(326.7*Math.min(1,el/10)).toFixed(2);if(l<=0){beep(440,.5);haptic([20,60,20]);numEl.textContent='✓';g.textContent='Repetir';g.disabled=false;return}requestAnimationFrame(f)})()},1000)}}
 function sc(v,cuts){for(var i=0;i<cuts.length;i++)if(v<cuts[i])return i+1;return cuts.length+1}
 function computeResult(){
   var best=Math.max.apply(null,laps),sHold=sc(best,[3,6,9]),sFast=sc(A.fast,[5,9,13]),sEnd=sc(A.end,[4,7,10]),sStand=Math.min(4,A.stand+1+(A.lift>0?1:0));
@@ -883,21 +886,31 @@ function openPlayer(s){
   $('#plRun').hidden=false;$('#plDone').hidden=true;
   setPhoto(steps[1]&&steps[1].img||'');$('#ph').textContent='Listo';$('#sec').textContent=mmss(total(steps));$('#info').textContent=ab?ABS[st.level].ex.length+' ejercicios':LV[st.level].pos[Math.min(s,LV[st.level].pos.length-1)];
   $('#cue').textContent='Sube el volumen y quita el modo silencio. Toca play para empezar.';$('#nextup').textContent='Primero: '+steps[0].b;
-  $('#arc').style.strokeDashoffset=0;$('#ptrack').style.width='0';$('#pEl').textContent='0:00';$('#pRem').textContent=mmss(total(steps));$('#pBlock').textContent='';
+  $('#arc').style.strokeDashoffset=0;$('#knob').setAttribute('cx','114');$('#knob').setAttribute('cy','60');$('#ptrack').style.width='0';$('#pEl').textContent='0:00';$('#pRem').textContent=mmss(total(steps));$('#pBlock').textContent='';
   setIcon('play');openOv($('#player'));
 }
 function setIcon(n){$('#plIcon').setAttribute('href','#i-'+n);$('#plPlay').setAttribute('aria-label',n==='play'?'Iniciar':'Pausa')}
 function isSqueeze(p){return p==='Aprieta'||p==='Rápido'||p==='Trabaja'}
 var lastImg=null;
 function setPhoto(k){if(k===lastImg)return;lastImg=k;$('#pphoto').innerHTML=photo(k);$('#pphoto').hidden=!k;$('#stage').classList.toggle('img',!!k)}
+var dIdx=-1,dSec=null,dTot=0,dBefore=0,ARC=null,KNOB=null,TRACK=null;
 function draw(left){
-  var s=steps[idx];setPhoto(s.img);var sq=isSqueeze(s.p),col=sq?'#2FD3C1':s.p==='Suelta'?'#FF9F45':'#8FA3A6';
-  $('#ph').textContent=s.p;$('#ph').style.color=col;$('#arc').setAttribute('stroke',col);
-  $('#sec').textContent=s.t>=60?mmss(left):Math.ceil(left);
-  $('#info').textContent=s.i||' ';$('#cue').textContent=s.c;
-  var nx=steps.slice(idx+1).filter(function(x){return x.b!==s.b})[0];$('#nextup').textContent=nx?'Después: '+nx.b:'Último bloque';
-  $('#arc').style.strokeDashoffset=(C2*(1-left/s.t)).toFixed(1);
-  var tot=total(steps),el=total(steps.slice(0,idx))+(s.t-left);$('#ptrack').style.width=(100*el/tot)+'%';$('#pEl').textContent=mmss(el);$('#pRem').textContent='-'+mmss(tot-el);$('#pBlock').textContent=s.b;
+  var s=steps[idx];
+  if(!ARC){ARC=$('#arc');KNOB=$('#knob');TRACK=$('#ptrack')}
+  if(dIdx!==idx){ // textos: solo al cambiar de paso
+    dIdx=idx;dSec=null;setPhoto(s.img);var sq=isSqueeze(s.p),col=sq?'#2FD3C1':s.p==='Suelta'?'#FF9F45':'#8FA3A6';
+    $('#ph').textContent=s.p;$('#ph').style.color=col;ARC.style.stroke=col;
+    $('#info').textContent=s.i||'\u00a0';$('#cue').textContent=s.c;$('#pBlock').textContent=s.b;
+    var nx=steps.slice(idx+1).filter(function(x){return x.b!==s.b})[0];$('#nextup').textContent=nx?'Después: '+nx.b:'Último bloque';
+    dTot=total(steps);dBefore=total(steps.slice(0,idx));
+  }
+  var sec=s.t>=60?mmss(left):Math.ceil(left);
+  if(sec!==dSec){dSec=sec;$('#sec').textContent=sec;var el0=dBefore+(s.t-left);$('#pEl').textContent=mmss(el0);$('#pRem').textContent='-'+mmss(dTot-el0)}
+  // anillo y perilla: cada cuadro, sin saltos
+  var f=Math.max(0,Math.min(1,left/s.t));
+  ARC.style.strokeDashoffset=(C2*(1-f)).toFixed(2);
+  var a=2*Math.PI*f;KNOB.setAttribute('cx',(60+54*Math.cos(a)).toFixed(2));KNOB.setAttribute('cy',(60+54*Math.sin(a)).toFixed(2));
+  TRACK.style.width=(100*(dBefore+(s.t-left))/dTot).toFixed(2)+'%';
 }
 function enterStep(){var s=steps[idx],sq=isSqueeze(s.p),orb=$('#orb');
   orb.style.setProperty('--c',sq?'#2FD3C1':'#FF9F45');orb.style.transitionDuration=Math.min(s.t,1.2)+'s';orb.style.transform=sq?'scale(1.15)':s.p==='Suelta'?'scale(.6)':'scale(.85)';
@@ -906,9 +919,10 @@ function tick(){var now=Date.now();
   while(now>=stepEnd){idx++;if(idx>=steps.length){finish();return}stepEnd+=steps[idx].t*1000}
   if(idx!==lastIdx){lastIdx=idx;enterStep()}
   draw((stepEnd-now)/1000)}
-function play(){unlockAudio();if(!started){started=true;idx=0;lastIdx=-1;stepEnd=Date.now()+steps[0].t*1000}else stepEnd=Date.now()+remain;paused=false;wake(true);setIcon('pause');tick();timer=setInterval(tick,100)}
-function pause(){paused=true;clearInterval(timer);timer=null;remain=stepEnd-Date.now();setIcon('play');wake(false);$('#cue').textContent='En pausa.'}
-function stopRun(){clearInterval(timer);timer=null;paused=true;started=false;wake(false)}
+var raf=0;function frame(){if(!timer)return;tick();if(timer)raf=requestAnimationFrame(frame)}
+function play(){unlockAudio();dIdx=-1;if(!started){started=true;idx=0;lastIdx=-1;stepEnd=Date.now()+steps[0].t*1000}else stepEnd=Date.now()+remain;paused=false;wake(true);setIcon('pause');timer=setInterval(tick,250);tick();cancelAnimationFrame(raf);raf=requestAnimationFrame(frame)}
+function pause(){paused=true;clearInterval(timer);timer=null;cancelAnimationFrame(raf);remain=stepEnd-Date.now();setIcon('play');wake(false);$('#cue').textContent='En pausa.'}
+function stopRun(){clearInterval(timer);timer=null;cancelAnimationFrame(raf);dIdx=-1;paused=true;started=false;wake(false)}
 function finish(){stopRun();beep(660,.3);setTimeout(function(){beep(880,.35)},200);haptic([20,60,20,60,30]);
   var k=dkey();
   if(slot==='abs'){if(!st.abs)st.abs={};st.abs[k]=1;save();renderHoy();var w=absWeek();$('#doneTxt').textContent=(w>=3?'Cumpliste las 3 rutinas de la semana.':'Llevas '+w+' de 3 esta semana.')+' ¿Cómo se sintió?';$('#plRun').hidden=true;$('#plDone').hidden=false;return}
