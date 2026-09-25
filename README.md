@@ -1,10 +1,12 @@
 # Piso Pélvico Fuerte
 
-App web para entrenar el piso pélvico masculino, con la meta de mejorar la firmeza de la erección y el control de la eyaculación. Se usa en el celular y se instala en la pantalla de inicio como una app.
+App web para entrenar el piso pélvico, para hombres y mujeres. Se adapta a lo que cada persona quiere mejorar: erección, control de la eyaculación, escapes de orina, urgencia, goteo, recuperación de próstata, prolapso, vida sexual, dolor pélvico, embarazo y posparto. Se usa en el celular y se instala en la pantalla de inicio como una app.
 
 ## Qué hace
 
-- **Evaluación inicial**: 7 pruebas de fuerza, el cuestionario IIEF-5 y 2 preguntas de control de eyaculación. Con eso asigna un nivel del 1 al 5.
+- **Perfil y objetivos**: hombre o mujer, qué quiere mejorar y, en mujeres, embarazo o posparto.
+- **Evaluación**: 7 pruebas de fuerza y los cuestionarios validados de cada objetivo (IIEF-5, ICIQ-UI SF, FSFI-6, síntomas de prolapso, urgencia, dolor). Asigna un nivel del 1 al 5, o un plan de relajación si el músculo está tenso de más.
+- **Plan según objetivos**: contracciones rápidas extra, apretar y toser, frenar la urgencia, posiciones seguras en embarazo y rutinas de abdomen adaptadas.
 - **Sesiones guiadas**: temporizador con anillo, pitidos y figuras que muestran cada ejercicio. De 1 a 3 sesiones al día según el nivel.
 - **Rutinas de abdomen** que suben de dificultad junto con el nivel.
 - **Progresión**: sube o baja de nivel según cómo se sienten las sesiones, y pide reevaluar cada 14 días.
@@ -21,7 +23,7 @@ Los datos quedan guardados solo en el navegador del teléfono. No hay servidor n
 
 ## Evidencia
 
-Basada en Dorey et al. 2005 (BJU Int), Pastore et al. 2014 (Ther Adv Urol), Rosen et al. 1999 (IIEF-5), Gerbild et al. 2018 (Sex Med), Esposito et al. 2004 (JAMA) y Sapsford et al. 2001. La autoevaluación es orientativa y no reemplaza a un kinesiólogo de piso pélvico ni una consulta médica.
+Basada en Dumoulin et al. 2018 y Woodley et al. 2020 (Cochrane), Hagen et al. 2014 (Lancet), Burgio et al. 1998 (JAMA), Anderson et al. 2015 (Cochrane), Dorey et al. 2005 (BJU Int), Pastore et al. 2014, Avery et al. 2004 (ICIQ-UI SF), Isidori et al. 2010 (FSFI-6), Rosen et al. 1999 (IIEF-5) y Sapsford et al. 2001. La autoevaluación es orientativa y no reemplaza a un kinesiólogo de piso pélvico ni una consulta médica.
 
 ## Estructura
 

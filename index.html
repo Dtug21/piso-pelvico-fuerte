@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Piso Pélvico Fuerte</title>
-<meta name="description" content="Entrenamiento del piso pélvico masculino: evaluación, sesiones guiadas y progresión por niveles.">
+<meta name="description" content="Entrenamiento del piso pélvico para hombres y mujeres: evaluación según tus objetivos, sesiones guiadas y progresión por niveles.">
 <meta name="theme-color" content="#F2F3F5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -386,7 +386,7 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
   <!-- NUTRICIÓN -->
   <section class="screen" id="s-comida" hidden>
     <div class="large"><div class="date">Flujo sanguíneo</div><h1>Nutrición</h1></div>
-    <p class="foot" style="margin:6px 4px 0">La erección depende de que las arterias se dilaten bien. Lo que cuida el corazón cuida la erección.</p>
+    <p class="foot" style="margin:6px 4px 0">El piso pélvico depende de tu peso, tu intestino y tu circulación: lo que cuida el corazón y evita pujar lo protege.</p>
     <div class="hdr">Suma</div><div class="group plain" id="foodYes"></div>
     <div class="hdr">Evita</div><div class="group plain" id="foodNo"></div>
     <div class="hdr">Suplementos</div>
@@ -478,7 +478,9 @@ var MAT='<rect x="30" y="136" width="190" height="5" rx="2.5" fill="var(--accent
 var CHAIR='<g stroke="var(--faint)" stroke-width="5" stroke-linecap="round"><line x1="98" y1="105" x2="150" y2="105"/><line x1="102" y1="105" x2="102" y2="139"/><line x1="146" y1="105" x2="146" y2="139"/><line x1="100" y1="105" x2="100" y2="58"/></g>';
 var BENCH='<rect x="26" y="100" width="56" height="39" rx="5" fill="var(--faint)" opacity=".45"/>';
 function BOARD(t){return '<path d="M108 139 a12 12 0 0 1 24 0z" fill="var(--faint)"/><line x1="82" y1="'+(128-t)+'" x2="158" y2="'+(128+t)+'" stroke="var(--warm)" stroke-width="6" stroke-linecap="round"/>'}
+var SIDE={h:[58,118],n:[78,125],p:[130,127],k:[164,112],f:[150,136],k2:[167,114],f2:[156,137],e:[96,112],w:[112,104],e2:[99,114],w2:[115,107]};
 var FIGS={
+ delado:{a:SIDE,b:SIDE,k:1,pr:MAT+'<ellipse cx="56" cy="133" rx="20" ry="6" fill="var(--faint)" opacity=".55"/>'},
  acostado:{a:SUP,b:SUP,k:1,pr:MAT},
  respiracion:{a:SUP,b:SUP,br:1,pr:MAT},
  sentado:{a:SEAT,b:SEAT,k:1,pr:CHAIR},
@@ -581,9 +583,9 @@ var LV=[null,
  {n:"Base",goal:"Construir fuerza en todas las posiciones.",perDay:3,pos:["Acostado","Sentado","De pie"],hold:5,rest:5,reps:10,fast:10,sets:1,
   extra:[["bolt","Apretar antes del esfuerzo","Al toser, pararte o levantar algo"],["run","Cardio","35–40 min, 4 días por semana"],["dumb","Fuerza","2 días: sentadilla, puente, plancha"]]},
  {n:"Fuerza",goal:"Contracciones largas y firmes, de pie.",perDay:3,pos:["Sentado","De pie","De pie"],hold:7,rest:5,reps:12,fast:15,sets:1,
-  extra:[["heart","Kegel con erección parcial","5–10 contracciones de 3–5 s, 1 vez al día"],["run","Cardio","40 min, 4 días por semana"],["dumb","Fuerza con carga progresiva","3 días por semana"],["gauge","Tabla de equilibrio","5 min con Kegel suave"]]},
- {n:"Potencia",goal:"Máxima rigidez y freno rápido de la eyaculación.",perDay:3,pos:["De pie","De pie","De pie"],hold:10,rest:5,reps:12,fast:20,sets:2,
-  extra:[["bolt","Freno rápido","3–5 contracciones rápidas cuando sientas que viene"],["gauge","Kegel en sentadilla y tabla de equilibrio","Cada día de fuerza"],["dumb","Peso muerto rumano, hip thrust","3 días por semana"],["run","Cardio","40 min, 4 días por semana"]]},
+  extra:[["run","Cardio","40 min, 4 días por semana"],["dumb","Fuerza con carga progresiva","3 días por semana"],["gauge","Tabla de equilibrio","5 min con Kegel suave"]]},
+ {n:"Potencia",goal:"Máxima fuerza y reacción rápida en el día a día.",perDay:3,pos:["De pie","De pie","De pie"],hold:10,rest:5,reps:12,fast:20,sets:2,
+  extra:[["gauge","Kegel en sentadilla y tabla de equilibrio","Cada día de fuerza"],["dumb","Peso muerto rumano, hip thrust","3 días por semana"],["run","Cardio","40 min, 4 días por semana"]]},
  {n:"Mantención",goal:"Conservar lo ganado con poco tiempo.",perDay:1,pos:["De pie"],hold:10,rest:5,reps:10,fast:20,sets:1,
   extra:[["run","Actividad física","150+ min por semana"],["gauge","Reevaluación","1 vez al mes"]]}
 ];
@@ -624,8 +626,141 @@ var ABS=[null,
   ["Plancha lateral · derecha",30,1,15,"Cuerpo recto.","Side_Bridge"],
   ["Puente",40,2,20,"Aprieta 3 s arriba.","Butt_Lift_Bridge"]]}
 ];
+/* ---------- Perfil: sexo, objetivos y etapa. Todo el plan se adapta a esto ---------- */
+var GOALS=[
+ {id:'de',sex:'h',ic:'heart',t:'Erecciones más firmes',s:'Disfunción eréctil o pérdida de firmeza'},
+ {id:'ep',sex:'h',ic:'bolt',t:'Durar más',s:'Eyaculación precoz o poco control'},
+ {id:'inc_esf',sex:'',ic:'alert',t:'Escapes al toser o hacer fuerza',s:'Al toser, reír, estornudar, saltar o levantar peso'},
+ {id:'inc_urg',sex:'',ic:'bell',t:'Urgencia para orinar',s:'Ganas repentinas, ir muy seguido o escapes antes de llegar'},
+ {id:'goteo',sex:'h',ic:'wind',t:'Goteo después de orinar',s:'Unas gotas que salen al vestirte'},
+ {id:'prost',sex:'h',ic:'redo',t:'Recuperación de próstata',s:'Escapes después de cirugía o tratamiento de próstata'},
+ {id:'prol',sex:'m',ic:'gauge',t:'Sensación de peso o bulto',s:'Presión en la vagina o síntomas de prolapso'},
+ {id:'sexual',sex:'m',ic:'heart',t:'Vida sexual',s:'Más sensibilidad, orgasmos más intensos, mejor control'},
+ {id:'dolor',sex:'',ic:'wind',t:'Dolor o tensión pélvica',s:'Dolor al sentarte, en relaciones o músculo apretado'},
+ {id:'prev',sex:'',ic:'dumb',t:'Prevención y fuerza',s:'Sin síntomas: quiero mantenerlo fuerte'}
+];
+var INC=['inc_esf','inc_urg','goteo','prost'];
+var STAGES=['No','Embarazada, primer trimestre','Embarazada, segundo o tercer trimestre','Parto hace menos de 6 semanas','Parto hace 6 semanas a 1 año'];
+if(st.level&&!st.profile){st.profile={sex:'h',goals:['de'].concat(st.peFocus?['ep']:[]),stage:0};save()}
+function prof(){return st.profile||{sex:'h',goals:['prev'],stage:0}}
+function has(g){return prof().goals.indexOf(g)>=0}
+function hasAny(a){return a.some(has)}
+function isM(){return prof().sex==='m'}
+function FX(){var p=prof(),m=p.sex==='m';return {relax:!!st.relax,fast:hasAny(['ep','inc_esf','prost','inc_urg']),urge:has('inc_urg'),knack:hasAny(['inc_esf','prost','prol']),drib:has('goteo'),
+  preg:m&&(p.stage===1||p.stage===2),side:m&&p.stage===2,post6:m&&p.stage===3}}
+function squeezeCue(){return isM()?'Cierra y eleva: como si cortaras el chorro y subieras la vagina hacia adentro.':'Corta el chorro y sube los testículos. Sigue respirando.'}
+function posFor(level,slot){var L=LV[level],p=L.pos[Math.min(slot,L.pos.length-1)];if(FX().side&&p==='Acostado')p='De lado';return p}
+function fastFor(level){var f=FX();return f.relax?0:LV[level].fast+(f.fast?5:0)}
+function goalName(id){var g=GOALS.filter(function(x){return x.id===id})[0];return g?g.t:id}
+function goalLabel(){return prof().goals.map(goalName).join(' · ')}
+function focusText(){var f=FX(),t=[];if(f.relax)return 'relajación y control del músculo';t.push('fuerza');if(f.fast)t.push('reacción rápida');if(f.urge)t.push('frenar la urgencia');if(f.knack)t.push('apretar antes del esfuerzo');if(f.drib)t.push('vaciado final');if(f.preg)t.push('embarazo');if(f.post6)t.push('posparto temprano');return t.join(', ')}
+function extrasFor(level){var f=FX(),out=LV[level].extra.slice();
+  if(has('de')&&level>=3)out.unshift(['heart','Kegel con erección parcial','5–10 contracciones de 3–5 s, 1 vez al día']);
+  if(has('ep')&&level>=2)out.unshift(['bolt','Freno rápido','3–5 contracciones rápidas cuando sientas que viene la eyaculación']);
+  if(f.urge){out.unshift(['bell','Entrenamiento de vejiga','Alarga de a 15 min el tiempo entre idas al baño; no vayas "por si acaso"']);out.push(['leaf','Menos irritantes','Café, alcohol, bebidas con gas y edulcorantes aumentan la urgencia'])}
+  if(f.drib)out.unshift(['wind','Al terminar de orinar','3 apretones fuertes, o presiona suave detrás del escroto hacia adelante']);
+  if(has('prol'))out.unshift(['alert','Evita pujar','Un piso bajo los pies en el baño, exhala al levantar peso y trata el estreñimiento']);
+  if(has('sexual'))out.push(['heart','Durante la excitación','Contracciones suaves aumentan la sensación y el flujo de sangre']);
+  if(f.preg)out=[['wind','Kegel todos los días','Previene escapes al final del embarazo y después del parto'],['run','Actividad aeróbica suave','150 min por semana si tu matrona o médico lo aprueba'],['alert','Evita aguantar el aire','Exhala en cada esfuerzo; nada de abdominales tipo crunch']];
+  if(f.post6)out=[['wind','Respiración y Kegel suave','Desde los primeros días si no hay dolor'],['alert','Nada de impacto','Espera tu control de las 6 semanas para planchas, correr o saltar']];
+  if(f.relax)out=[['wind','Respiración diafragmática','5 min, 2 veces al día'],['hold','Estira caderas y aductores','Y evita apretar de más durante el día'],['alert','Kinesiología de piso pélvico','Con dolor, lo ideal es una evaluación presencial']];
+  return out}
+var ABS_PREG={n:"Embarazo",note:"Suave y sin acostarte boca arriba. Detente si sientes dolor, sangrado, mareo o contracciones.",ex:[
+  ["Respiración con transverso",40,2,15,"Sentada. Exhala, abraza suave al bebé hacia la columna y suma un Kegel suave. Inhala y suelta.","sentado"],
+  ["Bird dog",30,2,20,"En 4 apoyos, estira brazo y pierna contrarios sin arquear la espalda.","birddog"],
+  ["Sentadilla a silla",40,2,20,"Baja hasta rozar la silla y sube exhalando con un Kegel.","sentadilla"],
+  ["Apoyo en un pie",30,2,15,"Junto a una pared. Mantén la pelvis quieta y respira.","unpie"]]};
+var ABS_POST6={n:"Posparto temprano",note:"Solo respiración y activación suave hasta tu control de las 6 semanas.",ex:ABS[1].ex.slice(0,2)};
+var ABS_RELAX={n:"Relajación",note:"Movilidad suave para soltar caderas y piso pélvico. Nada de apretar fuerte.",ex:[
+  ["Respiración profunda",60,2,15,"Acostado. Al inhalar deja que el piso pélvico baje; exhala sin apretar.","respiracion"],
+  ["Apertura de rodilla",40,2,15,"Deja caer una rodilla hacia el lado, lento, respirando. Alterna.","apertura"],
+  ["Puente suave",30,2,20,"Sube la cadera sin apretar glúteos de más; baja soltando todo.","Butt_Lift_Bridge"]]};
+function absFor(level){var f=FX();if(f.relax)return ABS_RELAX;if(f.preg)return ABS_PREG;if(f.post6)return ABS_POST6;return ABS[level]}
+function sessionRows(level){var L=LV[level],f=FX(),fastN=fastFor(level);
+  if(f.relax)return row('wind','#4DB6AC','Respiración','60 s dejando que el piso pélvico baje')+row('hold','#0E9C8F','Contracciones suaves','8 × 3 s al 50%, 10 s soltando')+row('moon','#6E62E5','Dejar caer','6 × 6 s, como al empezar a orinar')+row('moon','#7C8B93','Relajación final','60 s');
+  return row('wind','#4DB6AC','Respiración','20 s para soltar el músculo')+
+   row('hold','#0E9C8F','Contracciones lentas',L.reps+' × '+L.hold+' s apretando, '+L.rest+' s soltando'+(L.sets>1?' · '+L.sets+' series':''))+
+   (fastN?row('bolt','#E07A1F','Contracciones rápidas',fastN+' × 1 s'+(f.fast?' · incluye +5 por tus objetivos':'')):'')+
+   (f.urge?row('bell','#3B9EEB','Frenar la urgencia','5 apretones rápidos y respiración'):'')+
+   (f.knack&&level>=2?row('bolt','#E5484D','Apretar y toser','5 toses con el piso pélvico apretado'):'')+
+   (level>=3&&level<5&&!f.preg&&!f.post6?row('dumb','#6E62E5','Funcional (tarde)','6 sentadillas apretando al subir'):'')+
+   row('moon','#7C8B93','Relajación final','20 s')}
+/* Métrica principal según objetivos: la que se sigue en Tu evolución */
+function primary(e){if(!e)return null;
+  if(has('de')&&e.iief!=null)return {k:'iief',l:'IIEF-5',v:e.iief,max:25,up:true};
+  if(hasAny(INC)&&e.iciq!=null)return {k:'iciq',l:'Escapes',v:e.iciq,max:21,up:false};
+  if(has('prol')&&e.pop!=null)return {k:'pop',l:'Prolapso',v:e.pop,max:12,up:false};
+  if(has('sexual')&&e.fsfi!=null)return {k:'fsfi',l:'FSFI-6',v:e.fsfi,max:30,up:true};
+  if(has('dolor')&&e.pain!=null)return {k:'pain',l:'Dolor',v:e.pain,max:10,up:false};
+  if(has('ep')&&e.pe!=null)return {k:'pe',l:'Control',v:e.pe,max:8,up:false};
+  return null}
+/* Editor de perfil (sin repetir la evaluación) */
+function openProfile(){
+  var t={sex:prof().sex,goals:prof().goals.slice(),stage:prof().stage||0};
+  var draw=function(){
+    var list=GOALS.filter(function(g){return !g.sex||g.sex===t.sex});
+    $('#sheetBody').innerHTML='<div class="detail"><h2>Tu perfil</h2><p>Cambia tus objetivos y el plan se ajusta al tiro. Para medir un objetivo nuevo, reevalúate.</p>'+
+     '<div class="seg" id="pfSex"><button aria-pressed="'+(t.sex==='h')+'" data-v="h">Hombre</button><button aria-pressed="'+(t.sex==='m')+'" data-v="m">Mujer</button></div>'+
+     '<div class="hdr" style="margin-left:0">Objetivos</div><div class="group plain choice" id="pfGoals">'+list.map(function(g){return '<button class="rowi'+(t.goals.indexOf(g.id)>=0?' sel':'')+'" data-g="'+g.id+'"><div class="t"><b>'+g.t+'</b><span>'+g.s+'</span></div><svg class="i ck"><use href="#i-check"/></svg></button>'}).join('')+'</div>'+
+     (t.sex==='m'?'<div class="hdr" style="margin-left:0">Etapa</div><div class="group plain choice" id="pfStage">'+STAGES.map(function(s,i){return '<button class="rowi'+(t.stage===i?' sel':'')+'" data-s="'+i+'"><div class="t"><b>'+s+'</b></div><svg class="i ck"><use href="#i-check"/></svg></button>'}).join('')+'</div>':'')+
+     '<button class="btn press" id="pfSave" style="margin-top:18px"'+(t.goals.length?'':' disabled')+'>Guardar</button></div>';
+    $$('#pfSex button').forEach(function(b){b.onclick=function(){t.sex=b.getAttribute('data-v');t.goals=t.goals.filter(function(id){var g=GOALS.filter(function(x){return x.id===id})[0];return g&&(!g.sex||g.sex===t.sex)});if(t.sex==='h')t.stage=0;draw()}});
+    $$('#pfGoals .rowi').forEach(function(b){b.onclick=function(){var id=b.getAttribute('data-g'),i=t.goals.indexOf(id);if(i>=0)t.goals.splice(i,1);else t.goals.push(id);haptic(6);draw()}});
+    $$('#pfStage .rowi').forEach(function(b){b.onclick=function(){t.stage=+b.getAttribute('data-s');draw()}});
+    $('#pfSave').onclick=function(){st.profile=t;if(!hasAny(['dolor']))st.relax=st.relax&&st.evals.length&&st.evals[st.evals.length-1].rel===2;save();closeSheet();renderEvalTab();renderHoy();toast('Plan actualizado')};
+  };
+  openSheet('');draw();
+}
+/* ---------- Bancos de preguntas de la evaluación ---------- */
+var FREQ=[['Casi siempre o siempre',5],['La mayoría de las veces',4],['A veces',3],['Pocas veces',2],['Casi nunca o nunca',1]];
+var Q_ICIQ=[
+ {k:'u1',type:'ch',tag:'Escapes · ICIQ-UI 1 de 3',q:'¿Con qué frecuencia se te escapa la orina?',d:'Piensa en las últimas 4 semanas.',o:[['Nunca',0],['Una vez por semana o menos',1],['2 o 3 veces por semana',2],['Una vez al día',3],['Varias veces al día',4],['Todo el tiempo',5]]},
+ {k:'u2',type:'ch',tag:'Escapes · ICIQ-UI 2 de 3',q:'¿Cuánta orina se te escapa normalmente?',o:[['Nada',0],['Una cantidad pequeña',2],['Una cantidad moderada',4],['Una cantidad grande',6]]},
+ {k:'u3',type:'ch',tag:'Escapes · ICIQ-UI 3 de 3',q:'¿Cuánto afectan los escapes tu vida diaria?',o:[['Nada',0],['Poco',2],['Algo',4],['Bastante',6],['Mucho',8],['Muchísimo',10]]},
+ {k:'u4',type:'ch',tag:'Escapes · Tipo',q:'¿Cuándo se te escapa principalmente?',o:[['Al toser, estornudar o hacer fuerza',1],['Antes de llegar al baño, con ganas repentinas',2],['En ambas situaciones',3],['Justo después de orinar, al vestirme',4],['Sin motivo claro o durmiendo',5],['No tengo escapes',0]]}];
+var Q_URG=[
+ {k:'g1',type:'ch',tag:'Urgencia',q:'¿Qué tan seguido sientes ganas repentinas y difíciles de aguantar?',o:[['Nunca',0],['Pocas veces',1],['Algunas veces',2],['Muchas veces',3],['Casi siempre',4]]},
+ {k:'g2',type:'ch',tag:'Urgencia',q:'¿Cuántas veces te levantas de noche a orinar?',o:[['Ninguna',0],['1 vez',1],['2 veces',2],['3 o más',3]]}];
+var NEV=[['Nunca',0],['Pocas veces',1],['A veces',2],['Seguido',3],['Siempre',4]];
+var Q_POP=[
+ {k:'o1',type:'ch',tag:'Prolapso · 1 de 3',q:'¿Sientes un bulto o algo que baja por la vagina?',o:NEV},
+ {k:'o2',type:'ch',tag:'Prolapso · 2 de 3',q:'¿Sientes peso o presión en la vagina o la parte baja del abdomen?',o:NEV},
+ {k:'o3',type:'ch',tag:'Prolapso · 3 de 3',q:'¿Necesitas empujar con los dedos o cambiar de posición para orinar o evacuar?',o:NEV}];
+var NA=['Sin actividad sexual',0];
+var Q_FSFI=[
+ {k:'f1',type:'ch',tag:'FSFI-6 · 1 de 6',q:'¿Con qué frecuencia sentiste deseo o interés sexual?',d:'Piensa en las últimas 4 semanas.',o:FREQ},
+ {k:'f2',type:'ch',tag:'FSFI-6 · 2 de 6',q:'¿Cómo calificarías tu excitación durante la actividad sexual?',o:[NA,['Muy alta',5],['Alta',4],['Moderada',3],['Baja',2],['Muy baja o nada',1]]},
+ {k:'f3',type:'ch',tag:'FSFI-6 · 3 de 6',q:'¿Con qué frecuencia te lubricaste durante la actividad sexual?',o:[NA].concat(FREQ)},
+ {k:'f4',type:'ch',tag:'FSFI-6 · 4 de 6',q:'Con estimulación, ¿con qué frecuencia llegaste al orgasmo?',o:[NA].concat(FREQ)},
+ {k:'f5',type:'ch',tag:'FSFI-6 · 5 de 6',q:'¿Qué tan satisfecha estás con tu vida sexual en general?',o:[['Muy satisfecha',5],['Moderadamente satisfecha',4],['Ni satisfecha ni insatisfecha',3],['Moderadamente insatisfecha',2],['Muy insatisfecha',1]]},
+ {k:'f6',type:'ch',tag:'FSFI-6 · 6 de 6',q:'¿Con qué frecuencia sentiste molestia o dolor durante la penetración?',o:[['No intenté penetración',0],['Casi nunca o nunca',5],['Pocas veces',4],['A veces',3],['La mayoría de las veces',2],['Casi siempre o siempre',1]]}];
+var Q_PAIN=[{k:'pn',type:'ch',tag:'Dolor',q:'En la última semana, ¿cuánto dolor o tensión pélvica sentiste en promedio?',o:[['0 · Nada',0],['2 · Leve',2],['4 · Moderado',4],['6 · Importante',6],['8 · Fuerte',8],['10 · El peor imaginable',10]]}];
+var Q_PE=[
+ {k:'pe1',type:'ch',tag:'Control de eyaculación',q:'¿Qué tanto logras retrasar la eyaculación cuando quieres?',o:[['Siempre',0],['Casi siempre',1],['A veces',2],['Casi nunca',3],['Nunca',4]]},
+ {k:'pe2',type:'ch',tag:'Control de eyaculación',q:'Desde la penetración, ¿cuánto duras normalmente?',o:[['Menos de 1 min',4],['1 a 2 min',3],['2 a 4 min',2],['4 a 7 min',1],['Más de 7 min',0]]}];
+function wizSteps(){
+  var sex=A.sex===2?'m':A.sex===1?'h':null,g=A.goals||[],inG=function(x){return g.indexOf(x)>=0};
+  var L=[{k:'sex',type:'ch',tag:'Tu perfil',q:'¿Para quién es este entrenamiento?',d:'El músculo es el mismo, pero las pruebas, los cuestionarios y las indicaciones cambian.',o:[['Hombre',1],['Mujer',2]]},
+         {k:'goals',type:'multi',tag:'Tus objetivos',q:'¿Qué quieres mejorar?',d:'Elige todo lo que aplique. Tus sesiones se van a centrar en esto.'}];
+  if(sex==='m')L.push({k:'stage',type:'ch',tag:'Tu etapa',q:'¿Estás embarazada o tuviste un parto hace poco?',d:'Cambia las posiciones y la intensidad de tu plan.',o:STAGES.map(function(s,i){return [s,i]})});
+  L.push({k:'intro'},{k:'hold'},{k:'fast'},
+   {k:'end',type:'num',tag:'Prueba 3 · Resistencia',q:'¿Cuántas repeticiones de 5 s apretando y 5 s soltando haces antes de perder fuerza?',d:'Para cuando la contracción se sienta más débil o empiecen a apretar los glúteos.',max:30},
+   {k:'acc',type:'ch',tag:'Prueba 4 · Aislamiento',q:'Al apretar, ¿se contraen glúteos, abdomen o muslos, o aguantas la respiración?',o:[['No, aíslo bien',0],['Un poco',1],['Sí, bastante',2]]},
+   {k:'rel',type:'ch',tag:'Prueba 5 · Relajación',q:'Después de apretar, ¿sientes que el músculo se suelta por completo?',o:[['Sí, se suelta',0],['No estoy seguro',1],['Queda tenso o duele',2]]},
+   {k:'stand',type:'ch',tag:'Prueba 6 · De pie',q:'De pie, ¿logras la misma contracción que acostado?',o:[['Sí, igual',2],['Más débil',1],['Casi no la siento',0]]},
+   {k:'lift',type:'ch',tag:'Prueba 7 · Elevación',q:sex==='m'?'Al apretar, ¿sientes que la zona entre la vagina y el ano sube hacia adentro?':'Al apretar, ¿ves que la base del pene y los testículos suben?',d:sex==='m'?'Puedes comprobarlo con un espejo o con la mano sobre el periné.':'Puedes comprobarlo frente a un espejo.',o:[['Sí, claramente',2],['Un poco',1],['No, o no estoy seguro',0]]});
+  if(inG('de'))IIEF.forEach(function(q,i){L.push({k:'i'+i,type:'ch',tag:'IIEF-5 · Pregunta '+(i+1)+' de 5',q:q[0],d:i===0?'Responde pensando en los últimos 6 meses.':'',o:q[1].map(function(o,j){return [o,j+1]})})});
+  if(inG('ep'))L=L.concat(Q_PE);
+  if(INC.some(inG))L=L.concat(Q_ICIQ);
+  if(inG('inc_urg'))L=L.concat(Q_URG);
+  if(inG('prol'))L=L.concat(Q_POP);
+  if(inG('sexual'))L=L.concat(Q_FSFI);
+  if(inG('dolor'))L=L.concat(Q_PAIN);
+  L.push({k:'result'});
+  return L;
+}
 function buildAbs(level){
-  var A2=ABS[level],steps=[],add=function(b,p,t,c,i,im){steps.push({b:b,p:p,t:t,c:c,i:i||'',img:im||''})};
+  var A2=absFor(level),steps=[],add=function(b,p,t,c,i,im){steps.push({b:b,p:p,t:t,c:c,i:i||'',img:im||''})};
   add('Preparación','Respira',20,'Acuéstate. Respira con el abdomen. En esta rutina siempre exhalas en el esfuerzo.');
   A2.ex.forEach(function(e,k){
     if(k>0)add(e[0],'Prepárate',10,'Siguiente: '+e[0]+'. '+e[4],'',e[5]);
@@ -638,16 +773,26 @@ function absWeek(){var n=0;for(var i=0;i<7;i++){var d=new Date();d.setDate(d.get
 
 /* ---------- Construcción de sesión ---------- */
 function build(level,slot){
-  var L=LV[level],pos=L.pos[Math.min(slot,L.pos.length-1)],steps=[],fastN=L.fast+(st.peFocus?5:0);
-  var PF={'Acostado':'acostado','Sentado':'sentado','De pie':'depie'}[pos];var add=function(block,ph,t,cue,info,im){steps.push({b:block,p:ph,t:t,c:cue,i:info||'',img:im||PF})};
+  var L=LV[level],f=FX(),pos=posFor(level,slot),steps=[],fastN=fastFor(level),r,k;
+  var PF={'Acostado':'acostado','Sentado':'sentado','De pie':'depie','De lado':'delado'}[pos];var add=function(block,ph,t,cue,info,im){steps.push({b:block,p:ph,t:t,c:cue,i:info||'',img:im||PF})};
+  if(f.relax){
+    add('Preparación','Respira',60,pos+'. Respira lento: al inhalar deja que el piso pélvico baje y se abra.','','respiracion');
+    for(r=1;r<=8;r++){add('Suaves','Aprieta',3,'Aprieta suave, al 50%. Sin forzar.','Rep '+r+' de 8');add('Suaves','Suelta',10,'Suelta del todo. Siente cómo baja.','Rep '+r+' de 8')}
+    for(r=1;r<=6;r++){add('Dejar caer','Relaja',6,'Inhala y deja caer el periné, como al empezar a orinar. Sin empujar.','Rep '+r+' de 6','respiracion');add('Dejar caer','Respira',4,'Exhala tranquilo.','Rep '+r+' de 6','respiracion')}
+    add('Cierre','Relaja',60,'Quédate quieto respirando. Suelta mandíbula, glúteos y abdomen.','','respiracion');
+    return steps}
   add('Preparación','Respira',20,pos+'. Respira lento con el abdomen y deja que el piso pélvico se suelte.');
   for(var s=1;s<=L.sets;s++){
-    for(var r=1;r<=L.reps;r++){var inf=(L.sets>1?'Serie '+s+' · ':'')+'Rep '+r+' de '+L.reps;add('Lentas','Aprieta',L.hold,'Corta el chorro y sube los testículos. Sigue respirando.',inf);add('Lentas','Suelta',L.rest,'Suelta por completo.',inf)}
-    add('Pausa','Descansa',30,'Respira normal. Viene el bloque rápido.');
-    for(var f=1;f<=fastN;f++){add('Rápidas','Rápido',1,'Aprieta fuerte y suelta al tiro.','Rápida '+f+' de '+fastN);add('Rápidas','Suelta',1,'Suelta.','Rápida '+f+' de '+fastN)}
+    for(r=1;r<=L.reps;r++){var inf=(L.sets>1?'Serie '+s+' · ':'')+'Rep '+r+' de '+L.reps;add('Lentas','Aprieta',L.hold,squeezeCue(),inf);add('Lentas','Suelta',L.rest,'Suelta por completo.',inf)}
+    if(fastN){add('Pausa','Descansa',30,'Respira normal. Viene el bloque rápido.');
+      for(var q=1;q<=fastN;q++){add('Rápidas','Rápido',1,'Aprieta fuerte y suelta al tiro.','Rápida '+q+' de '+fastN);add('Rápidas','Suelta',1,'Suelta.','Rápida '+q+' de '+fastN)}}
     if(s<L.sets)add('Pausa','Descansa',45,'Descanso entre series.');
   }
-  if(level>=3&&level<5&&slot===1){for(var k=1;k<=6;k++){add('Funcional','Aprieta',3,'Baja a sentadilla. Aprieta el piso pélvico al subir.','Sentadilla '+k+' de 6','Goblet_Squat');add('Funcional','Suelta',3,'Suelta arriba.','Sentadilla '+k+' de 6','Goblet_Squat')}}
+  if(f.urge){add('Frenar la urgencia','Descansa',6,'Imagina unas ganas fuertes de orinar. Quédate quieto, no corras.');
+    for(k=1;k<=5;k++){add('Frenar la urgencia','Rápido',1,'Apretones rápidos: la vejiga se calma.','Apretón '+k+' de 5');add('Frenar la urgencia','Suelta',1,'Suelta.','Apretón '+k+' de 5')}
+    add('Frenar la urgencia','Respira',15,'Respira lento hasta que la urgencia baje. Recién ahí camina tranquilo al baño.')}
+  if(f.knack&&level>=2){for(k=1;k<=5;k++){add('Apretar y toser','Aprieta',2,'Aprieta fuerte y tose manteniendo el apriete.','Tos '+k+' de 5');add('Apretar y toser','Suelta',4,'Suelta.','Tos '+k+' de 5')}}
+  if(level>=3&&level<5&&slot===1&&!f.preg&&!f.post6){for(k=1;k<=6;k++){add('Funcional','Aprieta',3,'Baja a sentadilla. Aprieta el piso pélvico al subir.','Sentadilla '+k+' de 6','Goblet_Squat');add('Funcional','Suelta',3,'Suelta arriba.','Sentadilla '+k+' de 6','Goblet_Squat')}}
   add('Cierre','Relaja',20,'Inhala largo y suelta todo el piso pélvico.');
   return steps;
 }
@@ -663,7 +808,7 @@ function nextCard(){
   var h=new Date().getHours(),absDue=!st.abs[dkey()]&&absWeek()<3&&!(st.abs[dkey(new Date(Date.now()-864e5))]);
   if(!pend.length){return '<div class="next"><span class="go" style="background:var(--green)">'+ico('check')+'</span><div class="t"><small>Listo por hoy</small><b>Completaste tus '+L.perDay+' sesiones</b><span>'+(absDue?'Te falta la rutina de abdomen de hoy.':'Mañana sigues con la racha.')+'</span></div></div>'}
   var want=h<13?0:h<19?1:2,s=pend.indexOf(want)>=0?want:pend[0];
-  return '<button class="next press" id="nextGo" data-s="'+s+'" style="width:100%;text-align:left"><span class="go">'+ico('play')+'</span><div class="t"><small>Siguiente sesión</small><b>'+SLOTS[s][0]+' · '+L.pos[s]+'</b><span>~'+Math.round(total(build(st.level,s))/60)+' min · '+L.reps+' lentas de '+L.hold+' s + '+(L.fast+(st.peFocus?5:0))+' rápidas</span></div></button>';
+  return '<button class="next press" id="nextGo" data-s="'+s+'" style="width:100%;text-align:left"><span class="go">'+ico('play')+'</span><div class="t"><small>Siguiente sesión</small><b>'+SLOTS[s][0]+' · '+posFor(st.level,s)+'</b><span>~'+Math.round(total(build(st.level,s))/60)+' min · '+(FX().relax?'relajación y contracciones suaves':L.reps+' lentas de '+L.hold+' s'+(fastFor(st.level)?' + '+fastFor(st.level)+' rápidas':''))+'</span></div></button>';
 }
 function weekCard(){
   var L=LV[st.level],D=['D','L','M','M','J','V','S'],h='',tot=0,absN=0,m=Math.round(total(build(st.level,0))/60),am=Math.round(total(buildAbs(st.level))/60),full=0;
@@ -676,32 +821,41 @@ function weekCard(){
 function evoCard(){
   var E=st.evals,f=E[0],l=E[E.length-1],wk=Math.floor(daysBetween(st.start,dkey())/7)+1,pos=Math.min(100,100*(wk-1)/12);
   var nextEval=Math.max(0,14-daysBetween(l.date,dkey()));
-  var d=function(a,b,u){var x=Math.round((b-a)*10)/10;return E.length<2?'<em class="eq">inicio</em>':'<em class="'+(x>0?'up':x<0?'dn':'eq')+'">'+(x>0?'+':'')+String(x).replace('.',',')+u+'</em>'};
-  var phase=wk<=4?'Aprendes a activar bien el músculo. Aún no se esperan cambios en la erección.':wk<=8?'La fuerza empieza a subir. Algunos notan erecciones más firmes desde aquí.':wk<=12?'Es la ventana donde la mayoría nota mejoras (Dorey: 3 a 6 meses).':'Mantención: sin práctica, lo ganado se pierde en semanas.';
-  return '<div class="hdr">Tu evolución</div><div class="card"><div class="evo"><div><span>Fuerza</span><b class="num">'+fmt(l.hold)+' s</b>'+d(f.hold,l.hold,' s')+'</div><div><span>Rápidas</span><b class="num">'+l.fast+'</b>'+d(f.fast,l.fast,'')+'</div><div><span>IIEF-5</span><b class="num">'+l.iief+'<small style="font-size:13px;color:var(--muted)">/25</small></b>'+d(f.iief,l.iief,'')+'</div></div>'+
+  var d=function(a,b,u,down){var x=Math.round((b-a)*10)/10,good=down?x<0:x>0,bad=down?x>0:x<0;return E.length<2||a==null?'<em class="eq">inicio</em>':'<em class="'+(good?'up':bad?'dn':'eq')+'">'+(x>0?'+':'')+String(x).replace('.',',')+u+'</em>'};var pm=primary(l),pf=pm&&f[pm.k]!=null?{v:f[pm.k]}:null;
+  var phase=wk<=4?'Aprendes a activar bien el músculo. Todavía no se esperan cambios en los síntomas.':wk<=8?'La fuerza empieza a subir. Muchas personas notan más control o menos escapes desde aquí.':wk<=12?'Es la ventana donde la mayoría nota mejoras: los estudios hablan de 3 a 6 meses.':'Mantención: sin práctica, lo ganado se pierde en semanas.';
+  return '<div class="hdr">Tu evolución</div><div class="card"><div class="evo"><div><span>Fuerza</span><b class="num">'+fmt(l.hold)+' s</b>'+d(f.hold,l.hold,' s')+'</div><div><span>Rápidas</span><b class="num">'+l.fast+'</b>'+d(f.fast,l.fast,'')+'</div>'+(pm?'<div><span>'+pm.l+'</span><b class="num">'+pm.v+'<small style="font-size:13px;color:var(--muted)">/'+pm.max+'</small></b>'+d(pf?pf.v:null,pm.v,'',!pm.up)+'</div>':'<div><span>Resistencia</span><b class="num">'+l.end+'</b>'+d(f.end,l.end,'')+'</div>')+'</div>'+
    '<div style="margin-top:16px;font-weight:600">Semana '+wk+' de 12</div><div class="timeline"><i style="width:'+pos+'%"></i><b style="left:'+pos+'%"></b></div><div class="tl-l"><span>Inicio</span><span>Sem 6</span><span>Sem 12</span></div>'+
    '<p class="foot" style="margin:10px 0 0">'+phase+'</p>'+
    '<button class="rowi press" id="evoRe" style="padding:12px 0 0;min-height:0"><span class="ic" style="background:#E07A1F">'+ico('redo')+'</span><div class="t"><b style="font-size:15px">'+(nextEval?'Reevaluación en '+nextEval+' día'+(nextEval>1?'s':''):'Reevaluación disponible hoy')+'</b><span>'+(E.length>1?E.length+' evaluaciones hechas':'Comparará tu avance contra hoy')+'</span></div><svg class="i chev"><use href="#i-chev"/></svg></button></div>';
 }
 var TIPS=[
- ["hold","Calidad antes que cantidad: 10 contracciones bien aisladas valen más que 30 con glúteos.","Dorey 2005"],
- ["wind","Soltar del todo entre repeticiones es parte del ejercicio. Un músculo que no relaja también causa DE.","Siegel 2014"],
- ["run","40 min de caminata rápida 4 veces por semana mejoran la erección, sobre todo si partes sedentario.","Gerbild 2018"],
- ["leaf","Aceite de oliva, legumbres, pescado y verduras: la dieta mediterránea cuida las arterias del pene.","Esposito 2006"],
- ["bolt","Si sientes que vas a eyacular, haz 3 a 5 contracciones rápidas y fuertes, y baja el ritmo.","Pastore 2014"],
- ["heart","Fumar es el factor evitable que más daña las arterias del pene. Dejarlo mejora la erección en meses.","Pourmand 2004"],
- ["moon","Dormir menos de 6 horas baja la testosterona en una semana. Apunta a 7 u 8 horas.","Leproult 2011"],
- ["bolt","Aprieta el piso pélvico antes de toser, pararte o levantar algo. Así entrenas sin darte cuenta.","Dorey 2004"],
- ["alert","Si tras una sesión sientes dolor pélvico, baja la intensidad y prioriza la relajación.","Kinesiología de piso pélvico"],
- ["dumb","El abdomen profundo y el piso pélvico trabajan juntos: exhala siempre en el esfuerzo.","Sapsford 2001"]];
-function tipCard(){var t=TIPS[Math.floor(Date.now()/864e5)%TIPS.length];return '<div class="card tip"><span class="ic">'+ico(t[0])+'</span><div><p>'+t[1]+'</p><small>'+t[2]+'</small></div></div>'}
+ ["hold","Calidad antes que cantidad: 10 contracciones bien aisladas valen más que 30 con glúteos.","Dorey 2005","all"],
+ ["wind","Soltar del todo entre repeticiones es parte del ejercicio. Un músculo que no relaja también da síntomas.","Siegel 2014","all"],
+ ["bolt","Aprieta el piso pélvico antes de toser, estornudar o levantar algo. Así entrenas sin darte cuenta.","Miller 1998","all"],
+ ["dumb","El abdomen profundo y el piso pélvico trabajan juntos: exhala siempre en el esfuerzo.","Sapsford 2001","all"],
+ ["alert","Si tras una sesión sientes dolor pélvico, baja la intensidad y prioriza la relajación.","Kinesiología de piso pélvico","all"],
+ ["leaf","Fibra y agua evitan el estreñimiento. Pujar al evacuar empuja y debilita el piso pélvico.","Guías de uroginecología","all"],
+ ["run","40 min de caminata rápida 4 veces por semana mejoran la erección, sobre todo si partes sedentario.","Gerbild 2018","de"],
+ ["heart","Fumar es el factor evitable que más daña las arterias del pene. Dejarlo mejora la erección en meses.","Pourmand 2004","de"],
+ ["moon","Dormir menos de 6 horas baja la testosterona en una semana. Apunta a 7 u 8 horas.","Leproult 2011","de"],
+ ["bolt","Si sientes que vas a eyacular, haz 3 a 5 contracciones rápidas y fuertes, y baja el ritmo.","Pastore 2014","ep"],
+ ["bell","Con ganas repentinas: quédate quieto, 5 apretones rápidos, respira y camina al baño cuando pase.","Burgio 1998","inc_urg"],
+ ["leaf","Café, alcohol y bebidas con gas irritan la vejiga. Reducirlos baja la urgencia.","Guías ICS","inc_urg"],
+ ["alert","En mujeres, entrenar el piso pélvico es el tratamiento de primera línea para los escapes.","Dumoulin 2018","inc_esf"],
+ ["run","Bajar un 5 a 10% de peso reduce los escapes casi a la mitad en mujeres con sobrepeso.","Subak 2009","inc_esf"],
+ ["wind","Después de orinar, 3 apretones fuertes vacían la uretra y evitan el goteo.","Paterson 1997","goteo"],
+ ["redo","Tras cirugía de próstata, sigue las indicaciones de tu urólogo: el entrenamiento suele acelerar la recuperación.","Anderson 2015","prost"],
+ ["gauge","Con síntomas de prolapso, evita pujar y levantar peso aguantando el aire.","Hagen 2014","prol"],
+ ["heart","Un piso pélvico fuerte se asocia a más sensación y orgasmos más intensos.","Lowenstein 2010","sexual"],
+ ["moon","Con dolor pélvico, la meta es soltar: respiración lenta y contracciones suaves, nunca fuertes.","FitzGerald 2012","dolor"]];
+function tipCard(){var T=TIPS.filter(function(x){return x[3]==='all'||has(x[3])});var t=T[Math.floor(Date.now()/864e5)%T.length];return '<div class="card tip"><span class="ic">'+ico(t[0])+'</span><div><p>'+t[1]+'</p><small>'+t[2]+'</small></div></div>'}
 function hrs(){var H=st.hours||['08:00','14:00','20:00'];return H.map(function(x){var a=x.split(':');return +a[0]*60+ +a[1]})}
 function nowMin(){var d=new Date();return d.getHours()*60+d.getMinutes()}
 function pendingItems(){
   if(!st.level)return [{id:'eval',ic:'gauge',col:'#0E9C8F',t:'Haz tu evaluación',s:'10 min para definir tu nivel',due:true,act:'eval'}];
   if(!st.abs)st.abs={};var L=LV[st.level],l=st.log[dkey()]||[],H=hrs(),now=nowMin(),out=[];
   for(var i=0;i<L.perDay;i++){if(l.indexOf(i)>=0)continue;var h=L.perDay===1?H[0]:H[i],late=now>=h+120;
-    out.push({id:'s'+i,ic:SLOTS[i][1],col:SLOTS[i][2],t:'Sesión de la '+SLOTS[i][0].toLowerCase(),s:L.pos[i]+' · ~'+Math.round(total(build(st.level,i))/60)+' min',when:(now>=h?(late?'Atrasada':'Ahora'):'A las '+(st.hours||['08:00','14:00','20:00'])[L.perDay===1?0:i]),late:late,due:now>=h,act:i})}
+    out.push({id:'s'+i,ic:SLOTS[i][1],col:SLOTS[i][2],t:'Sesión de la '+SLOTS[i][0].toLowerCase(),s:posFor(st.level,i)+' · ~'+Math.round(total(build(st.level,i))/60)+' min',when:(now>=h?(late?'Atrasada':'Ahora'):'A las '+(st.hours||['08:00','14:00','20:00'])[L.perDay===1?0:i]),late:late,due:now>=h,act:i})}
   var y=dkey(new Date(Date.now()-864e5));
   if(!st.abs[dkey()]&&absWeek()<3&&!st.abs[y])out.push({id:'abs',ic:'hold',col:'#E5484D',t:'Rutina de abdomen',s:'Te faltan '+(3-absWeek())+' esta semana · ~'+Math.round(total(buildAbs(st.level))/60)+' min',when:'Hoy',due:now>=H[1],act:'abs'});
   var le=st.evals[st.evals.length-1];if(le&&daysBetween(le.date,dkey())>=14)out.push({id:'re',ic:'redo',col:'#E07A1F',t:'Toca reevaluarte',s:'Pasaron '+daysBetween(le.date,dkey())+' días desde la última',when:'Hoy',due:true,act:'eval'});
@@ -742,30 +896,26 @@ function installCard(){
 }
 function renderHoy(){
   var box=$('#hoyBody');var inst=installCard();
-  if(!st.level){box.innerHTML=inst+'<div class="card hero"><div class="big">'+ico('gauge')+'</div><h2>Empieza por tu evaluación</h2><p>10 minutos para medir fuerza, velocidad y resistencia. Con eso la app arma tus sesiones diarias.</p><button class="btn press" id="goEval">Evaluarme ahora</button></div>';$('#goEval').onclick=openWizard;return}
+  if(!st.level){box.innerHTML=inst+'<div class="card hero"><div class="big">'+ico('gauge')+'</div><h2>Empieza por tu evaluación</h2><p>Cuéntanos qué quieres mejorar y mide tu fuerza en 10 minutos. Con eso la app arma tus sesiones diarias.</p><button class="btn press" id="goEval">Evaluarme ahora</button></div>';$('#goEval').onclick=openWizard;return}
   var L=LV[st.level],today=st.log[dkey()]||[],dl=daysBetween(st.levelSince,dkey()),adh=adherence(),n=today.length,pct=Math.min(1,n/L.perDay);
   var easy=st.rpe.slice(-6).filter(function(r){return r===1}).length,hard=st.rpe.slice(-4).filter(function(r){return r===3}).length,adv='';
   if(dl>=14&&adh>=70)adv='<div class="banner">'+ico('redo')+'<div><p><b>Toca reevaluarte.</b> Llevas '+dl+' días en este nivel con '+adh+'% de sesiones hechas.</p><button class="btn warm press" data-a="re">Reevaluar</button></div></div>';
   else if(easy>=6&&st.level<5)adv='<div class="banner">'+ico('bolt')+'<div><p><b>Te está quedando fácil.</b> Tus últimas 6 sesiones fueron fáciles.</p><button class="btn warm press" data-a="up">Subir a '+LV[st.level+1].n+'</button></div></div>';
   else if(hard>=4)adv='<div class="banner">'+ico('alert')+'<div><p><b>Se te está haciendo pesado.</b> Si terminas con dolor o no logras soltar el músculo, baja un nivel.</p>'+(st.level>1?'<button class="btn warm press" data-a="down">Bajar a '+LV[st.level-1].n+'</button>':'')+'</div></div>';
   if(!st.abs)st.abs={};if(!st.start)st.start=st.evals.length?st.evals[0].date:dkey();var absToday=!!st.abs[dkey()];
-  var mins=Math.round(total(build(st.level,0))/60),fastN=L.fast+(st.peFocus?5:0),C=339.3;
+  var mins=Math.round(total(build(st.level,0))/60),C=339.3;
   box.innerHTML=inst+remindCard()+'<div class="card"><div class="summary"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent-soft)" stroke-width="13"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--accent)" stroke-width="13" stroke-linecap="round" stroke-dasharray="314.2" stroke-dashoffset="'+(314.2*(1-pct)).toFixed(1)+'" style="transition:stroke-dashoffset .8s cubic-bezier(.32,.72,0,1)"/></svg><div class="in"><b class="num">'+n+'/'+L.perDay+'</b><span>sesiones</span></div></div>'+
-   '<div><div class="lvbadge"><i>'+st.level+'</i>'+L.n+'</div><div class="kv" style="margin-top:10px"><div><span>Racha</span><b class="num">'+streak()+' <small>días</small></b></div><div><span>Constancia</span><b class="num">'+adh+'<small>%</small></b></div><div><span>En el nivel</span><b class="num">'+(dl+1)+' <small>días</small></b></div><div><span>Por sesión</span><b class="num">'+mins+' <small>min</small></b></div></div></div></div>'+nextCard()+'</div>'+adv+
-   '<div class="hdr">Sesiones de hoy</div><div class="group">'+SLOTS.slice(0,L.perDay).map(function(s,i){var d=today.indexOf(i)>=0;return '<div class="rowi press" data-s="'+i+'" role="button" tabindex="0"><span class="ic" style="background:'+s[2]+'">'+ico(s[1])+'</span><div class="t"><b>'+s[0]+'</b><span>'+L.pos[i]+' · '+mins+' min'+(d?' · hecha':'')+'</span></div><button class="check'+(d?' on':'')+'" data-c="'+i+'" aria-label="Marcar '+s[0]+' como hecha">'+ico('check')+'</button></div>'}).join('')+'</div>'+
+   '<div><div class="lvbadge"><i>'+st.level+'</i>'+(FX().relax?'Relajación':L.n)+'</div><div style="font-size:13px;color:var(--muted);margin-top:3px">Enfoque: '+focusText()+'</div><div class="kv" style="margin-top:10px"><div><span>Racha</span><b class="num">'+streak()+' <small>días</small></b></div><div><span>Constancia</span><b class="num">'+adh+'<small>%</small></b></div><div><span>En el nivel</span><b class="num">'+(dl+1)+' <small>días</small></b></div><div><span>Por sesión</span><b class="num">'+mins+' <small>min</small></b></div></div></div></div>'+nextCard()+'</div>'+adv+
+   '<div class="hdr">Sesiones de hoy</div><div class="group">'+SLOTS.slice(0,L.perDay).map(function(s,i){var d=today.indexOf(i)>=0;return '<div class="rowi press" data-s="'+i+'" role="button" tabindex="0"><span class="ic" style="background:'+s[2]+'">'+ico(s[1])+'</span><div class="t"><b>'+s[0]+'</b><span>'+posFor(st.level,i)+' · '+mins+' min'+(d?' · hecha':'')+'</span></div><button class="check'+(d?' on':'')+'" data-c="'+i+'" aria-label="Marcar '+s[0]+' como hecha">'+ico('check')+'</button></div>'}).join('')+'</div>'+
    '<p class="foot">Toca una sesión para hacerla guiada. Si la hiciste sin la app, toca el círculo.</p>'+
    '<div class="hdr">Cada sesión</div><div class="group">'+
-   row('wind','#4DB6AC','Respiración','20 s para soltar el músculo')+
-   row('hold','#0E9C8F','Contracciones lentas',L.reps+' × '+L.hold+' s apretando, '+L.rest+' s soltando'+(L.sets>1?' · '+L.sets+' series':''))+
-   row('bolt','#E07A1F','Contracciones rápidas',fastN+' × 1 s'+(st.peFocus?' · incluye +5 para control':''))+
-   (st.level>=3&&st.level<5?row('dumb','#6E62E5','Funcional (tarde)','6 sentadillas apretando al subir'):'')+
-   row('moon','#7C8B93','Relajación final','20 s')+'</div>'+
-   '<div class="hdr">Abdomen · 3 veces por semana</div><div class="group"><div class="rowi press" data-s="abs" role="button" tabindex="0"><span class="ic" style="background:#E5484D">'+ico('hold')+'</span><div class="t"><b>Rutina '+ABS[st.level].n.toLowerCase()+'</b><span>'+ABS[st.level].ex.length+' ejercicios · '+Math.round(total(buildAbs(st.level))/60)+' min · '+absWeek()+'/3 esta semana'+(absToday?' · hecha hoy':'')+'</span></div><button class="check'+(absToday?' on':'')+'" data-c="abs" aria-label="Marcar abdomen como hecho">'+ico('check')+'</button></div></div>'+
-   '<p class="foot">'+ABS[st.level].note+' Hazla en días alternos. Puedes juntarla con la sesión de la tarde.</p>'+
+   sessionRows(st.level)+'</div>'+
+   '<div class="hdr">Abdomen · 3 veces por semana</div><div class="group"><div class="rowi press" data-s="abs" role="button" tabindex="0"><span class="ic" style="background:#E5484D">'+ico('hold')+'</span><div class="t"><b>Rutina '+absFor(st.level).n.toLowerCase()+'</b><span>'+absFor(st.level).ex.length+' ejercicios · '+Math.round(total(buildAbs(st.level))/60)+' min · '+absWeek()+'/3 esta semana'+(absToday?' · hecha hoy':'')+'</span></div><button class="check'+(absToday?' on':'')+'" data-c="abs" aria-label="Marcar abdomen como hecho">'+ico('check')+'</button></div></div>'+
+   '<p class="foot">'+absFor(st.level).note+' Hazla en días alternos. Puedes juntarla con la sesión de la tarde.</p>'+
    '<div class="hdr">Últimos 7 días</div>'+weekCard()+evoCard()+'<div class="hdr">Consejo de hoy</div>'+tipCard()+
-   '<div class="hdr">Durante la semana</div><div class="group">'+L.extra.map(function(x){return row(x[0],'#3B9EEB',x[1],x[2])}).join('')+'</div>'+
+   '<div class="hdr">Durante la semana</div><div class="group">'+extrasFor(st.level).map(function(x){return row(x[0],'#3B9EEB',x[1],x[2])}).join('')+'</div>'+
    '<div class="hdr">Niveles</div><div class="levels">'+LV.slice(1).map(function(l,i){return '<div class="lv'+(i+1===st.level?' cur':'')+'"><b>'+(i+1)+'</b><div>'+l.n+'</div><span>'+l.perDay+'×/día · '+l.hold+' s</span></div>'}).join('')+'</div>'+
-   '<p class="foot" style="margin-top:22px">Dolor pélvico, ardor al orinar o una DE nueva que empeora son motivo para ir al médico, no para entrenar más.</p>';
+   '<p class="foot" style="margin-top:22px">Dolor pélvico, sangre en la orina, ardor al orinar, fiebre o síntomas nuevos que empeoran son motivo para ir al médico, no para entrenar más.</p>';
   $$('#hoyBody .rowi[data-s]').forEach(function(r){r.onclick=function(e){if(e.target.closest('.check'))return;haptic(8);var v=r.getAttribute('data-s');openPlayer(v==='abs'?'abs':+v)}});
   $$('#hoyBody .check').forEach(function(c){c.onclick=function(){if(c.getAttribute('data-c')==='abs'){var k0=dkey(),was=!!st.abs[k0];if(was)delete st.abs[k0];else{st.abs[k0]=1;haptic(15)}save();renderHoy();toast(was?'Abdomen desmarcado':'Abdomen marcado como hecho');return}
     var s=+c.getAttribute('data-c'),k=dkey(),l=st.log[k]||[],i=l.indexOf(s);if(i>=0)l.splice(i,1);else{l.push(s);haptic(15)}st.log[k]=l;save();renderHoy();toast(i>=0?'Sesión desmarcada':'Sesión marcada como hecha')}});
@@ -777,12 +927,13 @@ function row(ic,col,t,s){return '<div class="rowi"><span class="ic" style="backg
 /* ---------- Pestaña Evaluar ---------- */
 function renderEvalTab(){
   var b=$('#evalBody');
-  var h='<div class="card hero" style="padding:22px 18px"><div class="big">'+ico('gauge')+'</div><h2>'+(st.evals.length?'Reevaluación':'Evaluación inicial')+'</h2><p>7 pruebas de fuerza, el cuestionario IIEF-5 y 2 preguntas de control. Hazla acostado, con la vejiga vacía.</p><button class="btn press" id="evStart">'+(st.evals.length?'Reevaluarme':'Empezar')+'</button></div>';
+  var h='<div class="card hero" style="padding:22px 18px"><div class="big">'+ico('gauge')+'</div><h2>'+(st.evals.length?'Reevaluación':'Evaluación inicial')+'</h2><p>Tus objetivos, 7 pruebas de fuerza y los cuestionarios validados de lo que quieras mejorar. Hazla con la vejiga vacía.</p><button class="btn press" id="evStart">'+(st.evals.length?'Reevaluarme':'Empezar')+'</button></div>';
+  if(st.profile)h+='<div class="hdr">Tu perfil</div><div class="group"><button class="rowi press" id="pfOpen"><span class="ic" style="background:#0E9C8F">'+ico('heart')+'</span><div class="t"><b>'+(isM()?'Mujer':'Hombre')+(isM()&&prof().stage?' · '+STAGES[prof().stage]:'')+'</b><span>'+goalLabel()+'</span></div><svg class="i chev"><use href="#i-chev"/></svg></button></div><p class="foot">Toca para cambiar tus objetivos sin repetir la evaluación.</p>';
   if(st.evals.length){
     var last=st.evals[st.evals.length-1],d=daysBetween(last.date,dkey());
-    h+='<p class="foot">'+(d>=14?'Ya pasaron '+d+' días: toca reevaluarte.':'Última hace '+d+' días. Lo ideal es cada 14 días.')+'</p><div class="hdr">Historial</div><div class="group plain">'+st.evals.slice().reverse().map(function(e){return '<div class="rowi"><div class="t"><b>Nivel '+e.level+' · '+LV[e.level].n+'</b><span>'+e.date+' · '+fmt(e.hold)+' s · '+e.fast+' rápidas · IIEF '+e.iief+'/25</span></div></div>'}).join('')+'</div>';
+    h+='<p class="foot">'+(d>=14?'Ya pasaron '+d+' días: toca reevaluarte.':'Última hace '+d+' días. Lo ideal es cada 14 días.')+'</p><div class="hdr">Historial</div><div class="group plain">'+st.evals.slice().reverse().map(function(e){return '<div class="rowi"><div class="t"><b>Nivel '+e.level+' · '+LV[e.level].n+'</b><span>'+e.date+' · '+fmt(e.hold)+' s · '+e.fast+' rápidas'+(function(){var pm=primary(e);return pm?' · '+pm.l+' '+pm.v+'/'+pm.max:''})()+'</span></div></div>'}).join('')+'</div>';
   }
-  b.innerHTML=h;$('#evStart').onclick=openWizard;
+  b.innerHTML=h;$('#evStart').onclick=openWizard;var pf=$('#pfOpen');if(pf)pf.onclick=openProfile;
 }
 
 /* ---------- Asistente de evaluación ---------- */
@@ -793,35 +944,24 @@ var IIEF=[
  ["Durante el coito, ¿qué tan difícil fue mantener la erección hasta terminar?",["Extremadamente difícil","Muy difícil","Difícil","Algo difícil","Nada difícil"]],
  ["Al intentar el coito, ¿qué tan seguido fue satisfactorio para ti?",["Casi nunca o nunca","Pocas veces","La mitad de las veces","La mayoría de las veces","Casi siempre o siempre"]]
 ];
-var W=[
- {k:'intro'},
- {k:'hold'},{k:'fast'},
- {k:'end',type:'num',tag:'Prueba 3 · Resistencia',q:'¿Cuántas repeticiones de 5 s apretando y 5 s soltando haces antes de perder fuerza?',d:'Para cuando la contracción se sienta más débil o empiecen a apretar los glúteos.',def:6,max:30},
- {k:'acc',type:'ch',tag:'Prueba 4 · Aislamiento',q:'Al apretar, ¿se contraen glúteos, abdomen o muslos, o aguantas la respiración?',o:[['No, aíslo bien',0],['Un poco',1],['Sí, bastante',2]]},
- {k:'rel',type:'ch',tag:'Prueba 5 · Relajación',q:'Después de apretar, ¿sientes que el músculo se suelta por completo?',o:[['Sí, se suelta',0],['No estoy seguro',1],['Queda tenso o duele',2]]},
- {k:'stand',type:'ch',tag:'Prueba 6 · De pie',q:'De pie, ¿logras la misma contracción que acostado?',o:[['Sí, igual',2],['Más débil',1],['Casi no la siento',0]]},
- {k:'lift',type:'ch',tag:'Prueba 7 · Elevación',q:'Con el pene en erección, al apretar ¿se levanta visiblemente?',o:[['Sí, claramente',2],['Un poco',1],['No, o no lo he probado',0]]}
-].concat(IIEF.map(function(q,i){return {k:'i'+i,type:'ch',tag:'IIEF-5 · Pregunta '+(i+1)+' de 5',q:q[0],d:i===0?'Responde pensando en los últimos 6 meses.':'',o:q[1].map(function(o,j){return [o,j+1]})}})).concat([
- {k:'pe1',type:'ch',tag:'Control de eyaculación',q:'¿Qué tanto logras retrasar la eyaculación cuando quieres?',o:[['Siempre',0],['Casi siempre',1],['A veces',2],['Casi nunca',3],['Nunca',4]]},
- {k:'pe2',type:'ch',tag:'Control de eyaculación',q:'Desde la penetración, ¿cuánto duras normalmente?',o:[['Menos de 1 min',4],['1 a 2 min',3],['2 a 4 min',2],['4 a 7 min',1],['Más de 7 min',0]]},
- {k:'result'}
-]);
+var W=[];
 var wi=0,A={},laps=[],swOn=false,swT0=0,swRaf=0,cdIv=null;
-function openWizard(){wi=0;A={end:6,fast:8};laps=[];swOn=false;renderStep();openOv($('#wiz'))}
+function openWizard(){wi=0;A={end:6,fast:8};if(st.profile){A.sex=st.profile.sex==='m'?2:1;A.goals=st.profile.goals.slice();A.stage=st.profile.stage||0}W=wizSteps();laps=[];swOn=false;renderStep();openOv($('#wiz'))}
 $('#wizX').onclick=function(){cancelAnimationFrame(swRaf);clearInterval(cdIv);closeOv($('#wiz'))};
 $('#wizBack').onclick=function(){if(wi>0){wi--;renderStep()}};
-$('#wizNext').onclick=function(){haptic(8);if(W[wi].k==='result'){closeOv($('#wiz'));showTab('hoy');return}if(W[wi].k==='hold'&&swOn)return;wi++;renderStep()};
-function canNext(){var s=W[wi];if(s.k==='hold')return laps.length>0&&!swOn;if(s.type==='ch')return A[s.k]!==undefined;return true}
+$('#wizNext').onclick=function(){haptic(8);W=wizSteps();if(W[wi].k==='result'){closeOv($('#wiz'));showTab('hoy');return}if(W[wi].k==='hold'&&swOn)return;wi++;renderStep()};
+function canNext(){var s=W[wi];if(s.type==='multi')return !!(A.goals&&A.goals.length);if(s.k==='hold')return laps.length>0&&!swOn;if(s.type==='ch')return A[s.k]!==undefined;return true}
 function renderStep(){
   cancelAnimationFrame(swRaf);clearInterval(cdIv);swOn=false;
-  var s=W[wi],b=$('#wizBody'),h='';
+  W=wizSteps();var s=W[wi],b=$('#wizBody'),h='',fem=A.sex===2,side=fem&&A.stage===2;
   $('#wizBar').style.width=(100*wi/(W.length-1))+'%';$('#wizN').textContent=s.k==='result'?'':(wi+1)+'/'+(W.length-1);
   $('#wizBack').style.visibility=wi>0&&s.k!=='result'?'visible':'hidden';
-  if(s.k==='intro')h='<div class="step"><div class="k">Antes de empezar</div><h2>Encuentra el músculo</h2><p class="d">Acuéstate boca arriba con las rodillas dobladas y la vejiga vacía, como en la foto.</p><div style="margin-bottom:16px">'+photo('acostado','Aprieta: se marca el piso pélvico')+'</div><div class="group">'+row('hold','#0E9C8F','Aprieta','Como si cortaras el chorro de orina y subieras los testículos')+row('alert','#E07A1F','Sin trampas','Glúteos, abdomen y muslos quietos. No aguantes la respiración.')+row('wind','#4DB6AC','Suelta','Relajar del todo cuenta tanto como apretar')+'</div><p class="foot">Son 3 pruebas cronometradas, 4 preguntas sobre cómo se siente la contracción, el IIEF-5 y 2 preguntas de control.</p></div>';
+  if(s.k==='intro')h='<div class="step"><div class="k">Antes de empezar</div><h2>Encuentra el músculo</h2><p class="d">'+(side?'Acuéstate de lado con las rodillas dobladas':'Acuéstate boca arriba con las rodillas dobladas')+' y la vejiga vacía, como en la figura.</p><div style="margin-bottom:16px">'+photo(side?'delado':'acostado','Aprieta: se marca el piso pélvico')+'</div><div class="group">'+row('hold','#0E9C8F','Aprieta',fem?'Como si cortaras el chorro de orina y subieras la vagina hacia adentro':'Como si cortaras el chorro de orina y subieras los testículos')+row('alert','#E07A1F','Sin trampas','Glúteos, abdomen y muslos quietos. No aguantes la respiración.')+row('wind','#4DB6AC','Suelta','Relajar del todo cuenta tanto como apretar')+'</div><p class="foot">Son 3 pruebas cronometradas, 4 preguntas sobre cómo se siente la contracción y los cuestionarios de tus objetivos.</p></div>';
   else if(s.k==='hold')h='<div class="step"><div class="k">Prueba 1 · Fuerza sostenida</div><h2>¿Cuánto aguantas apretando al máximo?</h2><p class="d">Mantén el dedo en el botón mientras aprietas el músculo. Levanta el dedo en cuanto la fuerza baje. Haz 2 o 3 intentos, con 30 s de descanso entre cada uno.</p><div class="sw"><div class="clock num" id="clock">0,0</div><button class="holdbtn" id="swGo" aria-label="Mantén presionado mientras aprietas"><span id="hbTxt">Mantén presionado</span><small id="hbSub">y suelta cuando pierdas fuerza</small></button><button class="back" id="swReset">Borrar intentos</button></div><div class="group plain laps" id="laps"></div></div>';
   else if(s.k==='fast')h='<div class="step"><div class="k">Prueba 2 · Velocidad</div><h2>¿Cuántas rápidas haces en 10 s?</h2><p class="d">Aprieta y suelta del todo cada vez. Cuéntalas en voz baja. El cronómetro te avisa con un pitido al empezar y al terminar.</p><div class="cd" id="cd"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--sep)" stroke-width="8"/><circle id="cdArc" cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><div class="in num" id="cdN">10</div></div><button class="btn sec press" id="cdGo" style="margin-top:14px">Iniciar 10 s</button><div class="hdr" style="text-align:center;margin-left:0">¿Cuántas hiciste?</div>'+stepper('fast',40)+'</div>';
   else if(s.type==='num')h='<div class="step"><div class="k">'+s.tag+'</div><h2>'+s.q+'</h2><p class="d">'+s.d+'</p>'+stepper(s.k,s.max)+'</div>';
   else if(s.type==='ch')h='<div class="step"><div class="k">'+s.tag+'</div><h2>'+s.q+'</h2>'+(s.d?'<p class="d">'+s.d+'</p>':'<div style="height:12px"></div>')+'<div class="group plain choice">'+s.o.map(function(o){return '<button class="rowi'+(A[s.k]===o[1]?' sel':'')+'" data-v="'+o[1]+'"><div class="t"><b>'+o[0]+'</b></div><svg class="i ck"><use href="#i-check"/></svg></button>'}).join('')+'</div></div>';
+  else if(s.type==='multi'){var sx=fem?'m':'h',gl=GOALS.filter(function(x){return !x.sex||x.sex===sx});if(!A.goals)A.goals=[];h='<div class="step"><div class="k">'+s.tag+'</div><h2>'+s.q+'</h2><p class="d">'+s.d+'</p><div class="group plain choice">'+gl.map(function(g){return '<button class="rowi'+(A.goals.indexOf(g.id)>=0?' sel':'')+'" data-g="'+g.id+'"><span class="ic" style="background:#0E9C8F">'+ico(g.ic)+'</span><div class="t"><b>'+g.t+'</b><span>'+g.s+'</span></div><svg class="i ck"><use href="#i-check"/></svg></button>'}).join('')+'</div></div>'}
   else if(s.k==='result')h=computeResult();
   b.innerHTML=h;b.scrollTop=0;
   $('#wizNext').textContent=s.k==='result'?'Ver mi plan de hoy':'Continuar';
@@ -829,7 +969,8 @@ function renderStep(){
   if(s.k==='hold')bindHold();
   if(s.k==='fast'||s.type==='num')bindStepper(s.k==='fast'?'fast':s.k,s.k==='fast'?40:s.max);
   if(s.k==='fast')bindFast();
-  if(s.type==='ch')$$('#wizBody .choice .rowi').forEach(function(r){r.onclick=function(){haptic(8);A[s.k]=+r.getAttribute('data-v');$$('#wizBody .choice .rowi').forEach(function(x){x.classList.toggle('sel',x===r)});$('#wizNext').disabled=false;setTimeout(function(){if(W[wi]===s){wi++;renderStep()}},260)}});
+  if(s.type==='multi')$$('#wizBody .choice .rowi').forEach(function(r){r.onclick=function(){haptic(6);var id=r.getAttribute('data-g'),i=A.goals.indexOf(id);if(i>=0)A.goals.splice(i,1);else A.goals.push(id);r.classList.toggle('sel',i<0);$('#wizNext').disabled=!A.goals.length}});
+  if(s.type==='ch')$$('#wizBody .choice .rowi').forEach(function(r){r.onclick=function(){haptic(8);A[s.k]=+r.getAttribute('data-v');if(s.k==='sex'){var sx=A.sex===2?'m':'h';A.goals=(A.goals||[]).filter(function(id){var g=GOALS.filter(function(x){return x.id===id})[0];return g&&(!g.sex||g.sex===sx)});if(sx==='h')A.stage=0}$$('#wizBody .choice .rowi').forEach(function(x){x.classList.toggle('sel',x===r)});$('#wizNext').disabled=false;setTimeout(function(){if(W[wi]&&W[wi].k===s.k){wi++;renderStep()}},260)}});
 }
 function stepper(k,max){return '<div class="stepper"><button class="press" data-d="-1" aria-label="Menos">'+ico('minus')+'</button><output class="num" id="stp">'+A[k]+'</output><button class="press" data-d="1" aria-label="Más">'+ico('plus')+'</button></div>'}
 function bindStepper(k,max){$$('#wizBody .stepper button').forEach(function(b){var rep,go=function(){A[k]=Math.max(0,Math.min(max,A[k]+(+b.getAttribute('data-d'))));$('#stp').textContent=A[k];haptic(4)};
@@ -855,25 +996,47 @@ function bindFast(){$('#cdGo').onclick=function(){unlockAudio();var g=this,n=3;g
     var arcEl=$('#cdArc'),numEl=$('#cdN'),last=null;(function f(){if(!document.body.contains(arcEl))return;var el=(Date.now()-t0)/1000,l=Math.max(0,10-el),n=Math.ceil(l);if(n!==last){last=n;numEl.textContent=n}arcEl.style.strokeDashoffset=(326.7*Math.min(1,el/10)).toFixed(2);if(l<=0){beep(440,.5);haptic([20,60,20]);numEl.textContent='✓';g.textContent='Repetir';g.disabled=false;return}requestAnimationFrame(f)})()},1000)}}
 function sc(v,cuts){for(var i=0;i<cuts.length;i++)if(v<cuts[i])return i+1;return cuts.length+1}
 function computeResult(){
+  var sex=A.sex===2?'m':'h',goals=(A.goals||[]).slice(),stage=sex==='m'?(A.stage||0):0,inG=function(x){return goals.indexOf(x)>=0},sum=function(ks){return ks.reduce(function(t,k){return t+(A[k]||0)},0)};
   var best=Math.max.apply(null,laps),sHold=sc(best,[3,6,9]),sFast=sc(A.fast,[5,9,13]),sEnd=sc(A.end,[4,7,10]),sStand=Math.min(4,A.stand+1+(A.lift>0?1:0));
-  var level=Math.max(1,Math.min(4,Math.round((sHold+sFast+sEnd+sStand)/4))),notes=[];
+  var level=Math.max(1,Math.min(4,Math.round((sHold+sFast+sEnd+sStand)/4))),notes=[],pills=[];
   if(A.acc===2){level=1;notes.push(['alert','Todavía se activan otros músculos. Partes en Activación hasta aislar bien el piso pélvico.'])}
   else if(A.acc===1&&level>2){level=2;notes.push(['alert','Hay algo de compensación con glúteos o abdomen. Quedas en Base hasta corregirla.'])}
-  if(A.rel===2){level=1;notes.push(['alert','Tu piso pélvico podría estar tenso de más. En ese caso apretar más puede empeorar la erección: prioriza soltar y consulta a un kinesiólogo de piso pélvico.'])}
-  var iief=A.i0+A.i1+A.i2+A.i3+A.i4,ed=iief>=22?['Sin DE','a']:iief>=17?['DE leve','b']:iief>=12?['DE leve a moderada','b']:iief>=8?['DE moderada','c']:['DE severa','c'];
-  var pe=A.pe1+A.pe2,peT=pe>=6?['Control bajo','c']:pe>=4?['Control intermedio','b']:['Buen control','a'];
-  if(iief<17)notes.push(['heart','Tu IIEF-5 sugiere DE moderada o mayor. Además de entrenar, consulta a un médico: puede ser una señal cardiovascular, de diabetes o de testosterona.']);
-  if(pe>=6)notes.push(['bolt','Tu plan suma contracciones rápidas extra, la base del protocolo para eyaculación precoz.']);
+  var ev={date:dkey(),hold:best,fast:A.fast,end:A.end,rel:A.rel,sex:sex,goals:goals};
+  if(inG('de')){var iief=sum(['i0','i1','i2','i3','i4']);ev.iief=iief;var ed=iief>=22?['Sin DE','a']:iief>=17?['DE leve','b']:iief>=12?['DE leve a moderada','b']:iief>=8?['DE moderada','c']:['DE severa','c'];pills.push(['IIEF-5 '+iief+'/25 · '+ed[0],ed[1]]);
+    if(iief<17)notes.push(['heart','Tu IIEF-5 sugiere DE moderada o mayor. Además de entrenar, consulta a un médico: puede ser una señal cardiovascular, de diabetes o de testosterona.'])}
+  if(inG('ep')){var pe=sum(['pe1','pe2']);ev.pe=pe;pills.push([pe>=6?'Control bajo':pe>=4?'Control intermedio':'Buen control',pe>=6?'c':pe>=4?'b':'a']);
+    if(pe>=6)notes.push(['bolt','Tu plan suma contracciones rápidas extra, la base del protocolo para eyaculación precoz.'])}
+  if(INC.some(inG)){var ic=sum(['u1','u2','u3']);ev.iciq=ic;ev.utype=A.u4;var sev=ic===0?['Sin escapes','a']:ic<=5?['Escapes leves','a']:ic<=12?['Escapes moderados','b']:ic<=18?['Escapes severos','c']:['Escapes muy severos','c'];pills.push(['ICIQ '+ic+'/21 · '+sev[0],sev[1]]);
+    if(ic>=13)notes.push(['alert','Tus escapes son importantes. El entrenamiento es el tratamiento de primera línea, pero conviene sumar una consulta con urología o uroginecología.']);
+    if(A.u4===5)notes.push(['alert','Los escapes sin motivo claro o durmiendo necesitan una evaluación médica.']);
+    if(A.u4===4&&sex==='h'&&!inG('goteo')){goals.push('goteo');notes.push(['wind','Tus escapes son de goteo después de orinar: agregué el apretón final a tu plan.'])}
+    if((A.u4===2||A.u4===3)&&!inG('inc_urg')){goals.push('inc_urg');notes.push(['bell','Tienes escapes con urgencia: agregué el entrenamiento para frenar la urgencia.'])}
+    if((A.u4===1||A.u4===3)&&!inG('inc_esf')){goals.push('inc_esf');notes.push(['bolt','Tienes escapes al hacer fuerza: agregué apretar antes de toser y del esfuerzo.'])}}
+  if(inG('prost'))notes.push(['redo','Tras cirugía de próstata, el entrenamiento puede acelerar la recuperación de los escapes. Sigue las indicaciones de tu urólogo.']);
+  if(inG('inc_urg')&&A.g2!=null){ev.urg=sum(['g1','g2']);if(A.g2>=2)notes.push(['moon','Levantarte 2 o más veces de noche a orinar conviene revisarlo con un médico.'])}
+  if(inG('prol')){var po=sum(['o1','o2','o3']);ev.pop=po;pills.push(['Prolapso '+po+'/12',po>=6?'c':po>=3?'b':'a']);
+    if(po>=6||A.o1>=3)notes.push(['alert','Tus síntomas de prolapso son marcados. Consulta con ginecología o una kinesióloga de piso pélvico: un pesario y el entrenamiento presencial ayudan mucho.'])}
+  if(inG('sexual')){var fs=sum(['f1','f2','f3','f4','f5','f6']);ev.fsfi=fs;pills.push(['FSFI-6 '+fs+'/30',fs<=19?'c':'a']);
+    if(fs<=19)notes.push(['heart','Tu FSFI-6 sugiere una posible dificultad sexual. El entrenamiento ayuda, y conversarlo con ginecología también.']);
+    if(A.f6>0&&A.f6<=2)notes.push(['alert','Sientes dolor seguido en la penetración: tu plan parte con relajación del piso pélvico.'])}
+  var pain=inG('dolor')?(A.pn||0):null;if(pain!=null){ev.pain=pain;pills.push(['Dolor '+pain+'/10',pain>=6?'c':pain>=3?'b':'a'])}
+  var relax=A.rel===2||(pain!=null&&pain>=6)||(pain!=null&&pain>=4&&A.rel>=1)||(A.f6>0&&A.f6<=2);
+  if(relax){level=1;notes.unshift(['wind','Tu piso pélvico parece tenso de más. Apretar fuerte podría empeorar tus síntomas: tu plan parte con relajación y contracciones suaves. Lo ideal es sumar una evaluación presencial con kinesiología de piso pélvico.'])}
+  if(stage===1||stage===2){level=Math.min(level,3);notes.push(['heart','Embarazo: entrenar es seguro y previene escapes, pero confírmalo con tu matrona o médico. Detente si sientes dolor, sangrado o contracciones.'])}
+  if(stage===3){level=1;notes.push(['alert','Posparto temprano: solo respiración y Kegel suave hasta tu control de las 6 semanas.'])}
+  if(stage===4)notes.push(['redo','Posparto: antes de volver a correr o saltar, idealmente evalúate con una kinesióloga de piso pélvico.']);
+  ev.level=level;
   var prev=st.evals.length?st.evals[st.evals.length-1]:null;
-  st.evals.push({date:dkey(),level:level,hold:best,fast:A.fast,end:A.end,iief:iief,pe:pe});
-  st.level=level;st.levelSince=dkey();st.rpe=[];st.peFocus=pe>=6;if(!st.start)st.start=dkey();save();
+  st.evals.push(ev);st.level=level;st.levelSince=dkey();st.rpe=[];st.relax=relax;st.peFocus=ev.pe>=6;
+  st.profile={sex:sex,goals:goals,stage:stage};if(!st.start)st.start=dkey();save();
   haptic([15,50,15]);beep(660,.25);setTimeout(function(){beep(880,.3)},180);
   var L=LV[level],m=function(l,v,t){return '<div class="meter"><span>'+l+'</span><div class="m"><i style="width:'+(v*25)+'%"></i></div><span class="v">'+t+'</span></div>'};
-  return '<div class="step res"><div class="k">Tu resultado</div><div class="lvl" style="margin:10px 0 6px"><div class="n">'+level+'</div><div><h2 style="margin:0">'+L.n+'</h2><div style="color:var(--muted);font-size:15px">'+L.goal+'</div></div></div>'+
+  var pm=primary(ev),pp=pm&&prev&&prev[pm.k]!=null?{l:pm.l,v:prev[pm.k],max:pm.max}:null;
+  return '<div class="step res"><div class="k">Tu resultado</div><div class="lvl" style="margin:10px 0 6px"><div class="n">'+level+'</div><div><h2 style="margin:0">'+(relax?'Relajación':L.n)+'</h2><div style="color:var(--muted);font-size:15px">'+(relax?'Primero aprender a soltar, después fortalecer.':L.goal)+'</div></div></div>'+
    '<div class="card" style="margin-top:14px">'+m('Fuerza',sHold,fmt(best)+' s')+m('Velocidad',sFast,A.fast+' en 10 s')+m('Resistencia',sEnd,A.end+' reps')+m('De pie',sStand,['','baja','media','buena','muy buena'][sStand])+
-   '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"><span class="pill '+ed[1]+'">IIEF-5 '+iief+'/25 · '+ed[0]+'</span><span class="pill '+peT[1]+'">'+peT[0]+'</span></div>'+
-   (prev?'<p class="foot" style="margin:10px 0 0">Antes ('+prev.date+'): nivel '+prev.level+', '+fmt(prev.hold)+' s, IIEF '+prev.iief+'.</p>':'')+'</div>'+
-   '<div class="hdr">Tu plan</div><div class="group">'+row('today','#0E9C8F',L.perDay+' sesión'+(L.perDay>1?'es':'')+' al día',SLOTS.slice(0,L.perDay).map(function(s){return s[0]}).join(', ')+' · ~'+Math.round(total(build(level,0))/60)+' min cada una')+row('redo','#E07A1F','Reevaluación','En 14 días')+'</div>'+
+   (pills.length?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">'+pills.map(function(x){return '<span class="pill '+x[1]+'">'+x[0]+'</span>'}).join('')+'</div>':'')+
+   (prev?'<p class="foot" style="margin:10px 0 0">Antes ('+prev.date+'): nivel '+prev.level+', '+fmt(prev.hold)+' s'+(pm&&pp?', '+pp.l+' '+pp.v+'/'+pp.max:'')+'.</p>':'')+'</div>'+
+   '<div class="hdr">Tu plan</div><div class="group">'+row('heart','#0E9C8F','Enfoque',focusText())+row('today','#0E9C8F',(L.perDay>1?L.perDay+' sesiones':'1 sesión')+' al día',SLOTS.slice(0,L.perDay).map(function(s){return s[0]}).join(', ')+' · ~'+Math.round(total(build(level,0))/60)+' min cada una')+row('redo','#E07A1F','Reevaluación','En 14 días')+'</div>'+
    (notes.length?'<div class="hdr">Importante</div><div class="group">'+notes.map(function(n){return row(n[0],'#E5484D','',n[1])}).join('')+'</div>':'')+'</div>';
 }
 
@@ -882,9 +1045,9 @@ var steps=[],slot=0,timer=null,paused=true,started=false,idx=0,stepEnd=0,remain=
 function openPlayer(s){
   if(timer&&slot===s){openOv($('#player'));return}
   stopRun();slot=s;var ab=s==='abs';steps=ab?buildAbs(st.level):build(st.level,s);
-  $('#plTitle').textContent=(ab?'Abdomen '+ABS[st.level].n.toLowerCase():SLOTS[s][0])+' · Nivel '+st.level;
+  $('#plTitle').textContent=(ab?'Abdomen '+absFor(st.level).n.toLowerCase():SLOTS[s][0])+' · Nivel '+st.level;
   $('#plRun').hidden=false;$('#plDone').hidden=true;
-  setPhoto(steps[1]&&steps[1].img||'');$('#ph').textContent='Listo';$('#sec').textContent=mmss(total(steps));$('#info').textContent=ab?ABS[st.level].ex.length+' ejercicios':LV[st.level].pos[Math.min(s,LV[st.level].pos.length-1)];
+  setPhoto(steps[1]&&steps[1].img||'');$('#ph').textContent='Listo';$('#sec').textContent=mmss(total(steps));$('#info').textContent=ab?absFor(st.level).ex.length+' ejercicios':LV[st.level].pos[Math.min(s,LV[st.level].pos.length-1)];
   $('#cue').textContent='Sube el volumen y quita el modo silencio. Toca play para empezar.';$('#nextup').textContent='Primero: '+steps[0].b;
   $('#arc').style.strokeDashoffset=0;$('#knob').setAttribute('cx','114');$('#knob').setAttribute('cy','60');$('#ptrack').style.width='0';$('#pEl').textContent='0:00';$('#pRem').textContent=mmss(total(steps));$('#pBlock').textContent='';
   setIcon('play');openOv($('#player'));
@@ -938,15 +1101,15 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden&&tim
 
 /* ---------- Ejercicios ---------- */
 var EX=[
- {img:"acostado",n:"Kegel lento",e:"a",g:"Kegel",c:"#0A2D2B",i:"hold",d:"Fortalece los músculos que mantienen la presión dentro del pene durante la erección.",h:["Aprieta al máximo el tiempo de tu nivel","Suelta el mismo tiempo o más","Avanza de acostado a sentado y luego de pie"]},
- {img:"sentado",n:"Kegel rápido",e:"a",g:"Kegel",c:"#0A2D2B",i:"bolt",d:"Respuesta veloz del músculo bulboesponjoso. Base del protocolo para eyaculación precoz (Pastore 2014).",h:["Aprieta fuerte 1 s y suelta","10 a 25 repeticiones según tu nivel","Úsalo como freno cuando sientas que viene la eyaculación"]},
+ {img:"acostado",n:"Kegel lento",e:"a",g:"Kegel",c:"#0A2D2B",i:"hold",d:"Fortalece el piso pélvico: cierra mejor la uretra, sostiene los órganos y mejora la función sexual.",h:["Aprieta al máximo el tiempo de tu nivel","Suelta el mismo tiempo o más","Avanza de acostado a sentado y luego de pie"]},
+ {img:"sentado",n:"Kegel rápido",e:"a",g:"Kegel",c:"#0A2D2B",i:"bolt",d:"Respuesta veloz del músculo: frena escapes al toser y es la base del protocolo para eyaculación precoz (Pastore 2014).",h:["Aprieta fuerte 1 s y suelta","10 a 25 repeticiones según tu nivel","Úsalo como freno cuando sientas que viene la eyaculación"]},
  {img:"esfuerzo",n:"Apretar en el esfuerzo",e:"a",g:"Kegel",c:"#0A2D2B",i:"bolt",d:"Contraer justo antes de toser, pararte o levantar algo. Parte del protocolo Dorey.",h:["Contrae antes del esfuerzo","Mantén durante el esfuerzo","Vuélvelo automático"]},
- {n:"Kegel con erección parcial",e:"b",g:"Kegel",c:"#0A2D2B",i:"heart",d:"Aumenta la rigidez y la conciencia del músculo. Desde el nivel 3.",h:["Con erección parcial, aprieta 3 a 5 s","5 a 10 repeticiones","1 vez al día"]},
+ {sx:"h",n:"Kegel con erección parcial",e:"b",g:"Kegel",c:"#0A2D2B",i:"heart",d:"Aumenta la rigidez y la conciencia del músculo. Desde el nivel 3.",h:["Con erección parcial, aprieta 3 a 5 s","5 a 10 repeticiones","1 vez al día"]},
  {img:"respiracion",n:"Respiración diafragmática",e:"b",g:"Cuerpo",c:"#4DB6AC",i:"wind",d:"Un piso pélvico tenso de más también causa DE. Aprender a soltarlo es parte del tratamiento.",h:["Inhala y deja bajar el piso pélvico","Exhala largo sin apretar","5 min al día"]},
  {img:"Goblet_Squat",n:"Sentadilla con peso",e:"b",g:"Con peso",c:"#6E62E5",i:"dumb",d:"Activa glúteos, aductores y piso pélvico juntos, y mejora el perfil metabólico.",h:["3 series de 8 a 12","Aprieta el piso pélvico al subir","2 a 3 veces por semana"]},
  {img:"Barbell_Hip_Thrust",n:"Puente de glúteo / hip thrust",e:"b",g:"Con peso",c:"#6E62E5",i:"dumb",d:"Activa glúteo y piso pélvico a la vez.",h:["Peso sobre la cadera","Sube y aprieta 3 s arriba","3 series de 10 a 12"]},
  {img:"Romanian_Deadlift",n:"Peso muerto rumano",e:"b",g:"Con peso",c:"#6E62E5",i:"dumb",d:"Cadena posterior y estabilidad de la pelvis. Desde el nivel 4.",h:["Espalda neutra","Activa el piso pélvico antes de subir","3 series de 8 a 10"]},
- {img:"Trail_Running_Walking",n:"Cardio",e:"a",g:"Cuerpo",c:"#3B9EEB",i:"run",d:"El factor más comprobado después del Kegel: unos 160 min por semana mejoran la DE (Gerbild 2018).",h:["40 min, 4 veces por semana","Puedes hablar pero no cantar","En bici usa asiento con canal central"]},
+ {img:"Trail_Running_Walking",n:"Cardio",e:"a",g:"Cuerpo",c:"#3B9EEB",i:"run",d:"Mejora la circulación y la erección (Gerbild 2018) y ayuda a bajar de peso, lo que reduce los escapes (Subak 2009).",h:["40 min, 4 veces por semana","Puedes hablar pero no cantar","En bici usa asiento con canal central"]},
  {img:"Plank",n:"Plancha con respiración",e:"b",g:"Cuerpo",c:"#3B9EEB",i:"hold",d:"Coordina diafragma, abdomen y piso pélvico.",h:["20 a 40 s","Exhala y sube el piso pélvico","3 a 4 rondas"]},
  {img:"Balance_Board",n:"Tabla de equilibrio",e:"b",g:"Equilibrio",c:"#E07A1F",i:"gauge",d:"La superficie inestable activa el piso pélvico de forma automática. Es un complemento: no hay ensayos en DE.",h:["30 a 60 s con Kegel suave","Rodillas levemente dobladas","Progresa a sentadilla parcial"]},
  {img:"unpie",n:"Apoyo en un pie con Kegel",e:"b",g:"Equilibrio",c:"#E07A1F",i:"gauge",d:"La versión sin equipo.",h:["30 s por pierna","Kegel al 30–50%","Cierra los ojos para más dificultad"]},
@@ -954,24 +1117,29 @@ var EX=[
  {img:"Dead_Bug",n:"Dead bug",e:"b",g:"Abdomen",c:"#E5484D",i:"hold",d:"Trabaja el core sin carga sobre la columna ni presión hacia abajo sobre el piso pélvico.",h:["Espalda baja pegada al suelo","Baja brazo y pierna contrarios exhalando","Si la espalda se despega, reduce el recorrido"]},
  {img:"lateral",n:"Plancha y plancha lateral",e:"b",g:"Abdomen",c:"#E5484D",i:"hold",d:"Estabilidad de tronco y pelvis. Parte con rodillas y avanza a la versión completa.",h:["Cuerpo recto","Respira normal, no aguantes el aire","Desde el nivel 4, suma un Kegel cada 5 s"]},
  {img:"Crunches",n:"Abdominales tipo sit-up con apnea",e:"c",g:"Abdomen",c:"#E5484D",i:"alert",d:"Los abdominales rápidos aguantando el aire empujan el piso pélvico hacia abajo. Al principio no ayudan: prefiere los ejercicios de la rutina.",h:["Siempre exhala en el esfuerzo","Primero el control, después la intensidad"]},
- {n:"Pesos colgados del pene / jelqing",e:"c",g:"Evitar",c:"#E5484D",i:"alert",d:"Sin evidencia de beneficio y con reportes de lesiones (fibrosis, curvatura).",h:["Usa la carga en el cuerpo, no en los genitales"]}
+ {sx:"h",n:"Pesos colgados del pene / jelqing",e:"c",g:"Evitar",c:"#E5484D",i:"alert",d:"Sin evidencia de beneficio y con reportes de lesiones (fibrosis, curvatura).",h:["Usa la carga en el cuerpo, no en los genitales"]}
 ];
+EX.splice(3,0,
+ {img:"sentado",n:"Frenar la urgencia",e:"a",g:"Kegel",c:"#3B9EEB",i:"bell",d:"Cuando llegan ganas repentinas de orinar, unos apretones rápidos calman la vejiga. Es parte del tratamiento conductual de la vejiga hiperactiva (Burgio 1998).",h:["Quédate quieto, no corras al baño","Haz 5 apretones rápidos y fuertes","Respira lento hasta que la urgencia baje y camina tranquilo"]},
+ {img:"respiracion",n:"Dejar caer (Kegel inverso)",e:"b",g:"Kegel",c:"#4DB6AC",i:"wind",d:"Para dolor o tensión pélvica: aprender a soltar y abrir el piso pélvico. Es la base del tratamiento cuando el músculo está tenso de más.",h:["Acostado, inhala lento","Deja que el periné baje, como al empezar a orinar, sin empujar","6 a 10 veces, 2 veces al día"]},
+ {sx:"h",img:"depie",n:"Apretar al terminar de orinar",e:"b",g:"Kegel",c:"#0A2D2B",i:"wind",d:"Contra el goteo después de orinar: vacía la uretra (Paterson 1997).",h:["Al terminar, aprieta fuerte 3 veces","O presiona suave detrás del escroto hacia adelante","Luego sacude y guarda"]},
+ {sx:"m",n:"Conos o pesas vaginales",e:"b",g:"Con peso",c:"#6E62E5",i:"dumb",d:"Pequeños pesos que se sostienen dentro de la vagina de pie o caminando. Funcionan mejor que no entrenar y parecido al Kegel (Herbison 2013). Úsalos cuando ya domines el Kegel.",h:["Parte con el más liviano, 15 min de pie o caminando","Sube de peso cuando ya no se deslice","No los uses en embarazo, con infección o con dolor"]});
 var EVN={a:'Sólida',b:'Moderada',c:'Evitar'},cats=['Todos','Kegel','Abdomen','Con peso','Cuerpo','Equilibrio','Evitar'],cat='Todos';
 function renderEx(){
   $('#exSeg').innerHTML=cats.map(function(c){return '<button aria-pressed="'+(c===cat)+'">'+c+'</button>'}).join('');
   $$('#exSeg button').forEach(function(b){b.onclick=function(){cat=b.textContent;haptic(5);renderEx()}});
-  var list=EX.filter(function(x){return cat==='Todos'||x.g===cat});$('#exHdr').textContent=cat+' · '+list.length;
+  var list=EX.filter(function(x){return (!x.sx||x.sx===(isM()?'m':'h'))&&(cat==='Todos'||x.g===cat)});$('#exHdr').textContent=cat+' · '+list.length;
   $('#exList').innerHTML=list.map(function(x){return '<button class="rowi" data-n="'+EX.indexOf(x)+'">'+(x.img?thumb(x.img):'<span class="ic" style="background:'+x.c+';width:44px;height:44px;border-radius:10px">'+ico(x.i)+'</span>')+'<div class="t"><b>'+x.n+'</b><span>'+x.g+'</span></div><span class="pill '+x.e+'">'+EVN[x.e]+'</span><svg class="i chev"><use href="#i-chev"/></svg></button>'}).join('');
   $$('#exList .rowi').forEach(function(r){r.onclick=function(){var x=EX[+r.getAttribute('data-n')];haptic(6);
     openSheet('<div class="detail">'+(x.img?photo(x.img,x.e==='c'?'Así no':'Inicio → final'):'<span class="ic" style="background:'+x.c+';width:52px;height:52px;border-radius:14px">'+ico(x.i)+'</span>')+'<h2>'+x.n+'</h2><div style="margin-bottom:12px"><span class="pill '+x.e+'">Evidencia '+EVN[x.e].toLowerCase()+'</span></div><p>'+x.d+'</p><div class="hdr" style="margin-left:0">Cómo hacerlo</div><ol>'+x.h.map(function(i){return '<li>'+i+'</li>'}).join('')+'</ol><button class="btn sec press" id="shClose" style="margin-top:18px">Listo</button></div>');$('#shClose').onclick=closeSheet}})
 }
 
 /* ---------- Nutrición y ciencia ---------- */
-var YES=[["Dieta mediterránea","Oliva, verduras, legumbres, pescado y frutos secos","a"],["Bajar de peso si hay sobrepeso","Un tercio recuperó la erección en Esposito 2004","a"],["Verduras de hoja y betarraga","Nitratos que se convierten en óxido nítrico","b"],["Berries, cítricos, uva","Flavonoides asociados a menos DE","b"],["Nueces, pistachos, almendras","Grasas buenas y arginina","b"],["Sandía y legumbres","Citrulina y arginina","b"],["Dormir 7 a 8 horas","Dormir poco baja la testosterona","b"]];
-var NO=[["Tabaco","El factor evitable que más daña las arterias del pene","a"],["Alcohol en exceso","Baja la rigidez de inmediato y daña a largo plazo","a"],["Ultraprocesados y azúcar","Dañan las arterias y el metabolismo","a"]];
+var YES=[["Dieta mediterránea","Oliva, verduras, legumbres, pescado y frutos secos","a"],["Bajar de peso si hay sobrepeso","Menos presión sobre la vejiga y mejor erección (Subak 2009, Esposito 2004)","a"],["Fibra y agua","Evitan el estreñimiento: pujar debilita el piso pélvico","a"],["Verduras de hoja y betarraga","Nitratos que se convierten en óxido nítrico","b"],["Berries, cítricos, uva","Flavonoides asociados a menos DE","b"],["Nueces, pistachos, almendras","Grasas buenas y arginina","b"],["Sandía y legumbres","Citrulina y arginina","b"],["Dormir 7 a 8 horas","Dormir poco baja la testosterona","b"]];
+var NO=[["Tabaco","Daña las arterias y la tos crónica empuja el piso pélvico","a"],["Café, bebidas con gas y edulcorantes","Irritan la vejiga y aumentan la urgencia","b"],["Alcohol en exceso","Baja la rigidez de inmediato y daña a largo plazo","a"],["Ultraprocesados y azúcar","Dañan las arterias y el metabolismo","a"]];
 var fr=function(f){return '<div class="rowi"><div class="t"><b>'+f[0]+'</b><span>'+f[1]+'</span></div><span class="pill '+f[2]+'">'+EVN[f[2]]+'</span></div>'};
 $('#foodYes').innerHTML=YES.map(fr).join('');$('#foodNo').innerHTML=NO.map(fr).join('');
-var REFS=[["Dorey et al., 2005 · BJU Int","Ensayo aleatorizado, 55 hombres con DE: 40% recuperó función normal y 35,5% mejoró con entrenamiento del piso pélvico."],["Pastore et al., 2014 · Ther Adv Urol","Rehabilitación del piso pélvico en eyaculación precoz: 82,5% logró control en 12 semanas."],["Rosen et al., 1999 · Int J Impot Res","Validación del IIEF-5, el cuestionario de la evaluación."],["Laycock & Jerwood, 2001 · Physiotherapy","Esquema PERFECT (fuerza, resistencia, repeticiones, rapidez), base de las pruebas."],["Sapsford et al., 2001 · Neurourol Urodyn","El abdomen profundo y el piso pélvico se coactivan: base de las rutinas de abdomen."],["Siegel, 2014 · Urology","Los ejercicios de piso pélvico son tratamiento de primera línea para DE y eyaculación precoz."],["Gerbild et al., 2018 · Sexual Medicine","Metaanálisis: la actividad aeróbica mejora la DE."],["Esposito et al., 2004 · JAMA","Bajar de peso y moverse más restauró la erección en un tercio de hombres obesos."],["Mykoniatis et al., 2018 · J Sex Med","La dieta mediterránea se asocia a mejor función eréctil."]];
+var REFS=[["Dumoulin et al., 2018 · Cochrane","En mujeres, el entrenamiento del piso pélvico cura o mejora la incontinencia mucho más que no tratar: es el tratamiento de primera línea."],["Woodley et al., 2020 · Cochrane","En embarazadas, entrenar reduce el riesgo de escapes al final del embarazo y después del parto."],["Hagen et al., 2014 · Lancet","El entrenamiento individual mejoró los síntomas de prolapso."],["Burgio et al., 1998 · JAMA","El tratamiento conductual, con técnicas para frenar la urgencia, redujo más los escapes por urgencia que el fármaco."],["Anderson et al., 2015 · Cochrane","Tras cirugía de próstata el beneficio a largo plazo es incierto, pero el entrenamiento puede acelerar la recuperación."],["Avery et al., 2004 · Neurourol Urodyn","Validación del ICIQ-UI SF, el cuestionario de escapes."],["Isidori et al., 2010 · J Sex Med","FSFI-6: versión corta validada del índice de función sexual femenina."],["Herbison & Dean, 2013 · Cochrane","Los conos vaginales son mejores que no tratar y parecidos al Kegel."],["Dorey et al., 2005 · BJU Int","Ensayo aleatorizado, 55 hombres con DE: 40% recuperó función normal y 35,5% mejoró con entrenamiento del piso pélvico."],["Pastore et al., 2014 · Ther Adv Urol","Rehabilitación del piso pélvico en eyaculación precoz: 82,5% logró control en 12 semanas."],["Rosen et al., 1999 · Int J Impot Res","Validación del IIEF-5, el cuestionario de la evaluación."],["Laycock & Jerwood, 2001 · Physiotherapy","Esquema PERFECT (fuerza, resistencia, repeticiones, rapidez), base de las pruebas."],["Sapsford et al., 2001 · Neurourol Urodyn","El abdomen profundo y el piso pélvico se coactivan: base de las rutinas de abdomen."],["Siegel, 2014 · Urology","Los ejercicios de piso pélvico son tratamiento de primera línea para DE y eyaculación precoz."],["Gerbild et al., 2018 · Sexual Medicine","Metaanálisis: la actividad aeróbica mejora la DE."],["Esposito et al., 2004 · JAMA","Bajar de peso y moverse más restauró la erección en un tercio de hombres obesos."],["Mykoniatis et al., 2018 · J Sex Med","La dieta mediterránea se asocia a mejor función eréctil."]];
 $('#refs').innerHTML=REFS.map(function(r){return '<div class="rowi"><div class="t"><b style="font-size:15px">'+r[0]+'</b><span>'+r[1]+'</span></div></div>'}).join('');
 (function(){var b=$('#notifBtn');var upd=function(){var p=window.Notification?Notification.permission:'none';$('#notifTxt').textContent=p==='granted'?'Avisos del sistema activados':p==='denied'?'Avisos bloqueados por el navegador':p==='none'?'Este navegador no permite avisos aquí':'Activar avisos del sistema'}; upd();
  b.onclick=function(){try{if(!window.Notification){toast('Este navegador no permite avisos aquí');return}Notification.requestPermission().then(function(){upd();toast(Notification.permission==='granted'?'Avisos activados':'El navegador no permitió los avisos')}).catch(function(){toast('El navegador no permitió los avisos')})}catch(e){toast('El navegador no permitió los avisos')}}})();
