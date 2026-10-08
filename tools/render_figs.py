@@ -13,9 +13,10 @@ from bpy_extras.object_utils import world_to_camera_view
 argv = sys.argv[sys.argv.index('--') + 1:]
 OUT, SEX = argv[0], argv[1]
 ONLY = set(argv[2:])
-FRAMES = 7
-W, H = 600, 400
+FRAMES = 13
+W, H = 720, 480
 ASSETS = os.environ.get('MPFB_ASSETS', '')
+YAW, PITCH = -24, 9   # cámara de tres cuartos, un poco desde arriba
 
 D = math.radians
 AD = {'upperarm01.L': (-15, 0, -40), 'upperarm01.R': (-15, 0, 40), 'lowerarm01.L': (-40, 0, 0), 'lowerarm01.R': (-40, 0, 0)}          # brazos a los lados
@@ -46,9 +47,9 @@ STAND = (0, 0, 0)
 POSES = {
     'acostado': {'a': {'orient': SUP, 'bones': M(AD, KB)}, 'props': ['mat']},
     'delado': {'a': {'orient': SIDE, 'bones': M(AD, both('upperleg01', -60), both('lowerleg01', 80))}, 'props': ['mat']},
-    'sentado': {'a': {'orient': STAND, 'bones': SIT}, 'props': ['chair']},
-    'depie': {'a': {'orient': STAND, 'bones': M(AD)}},
-    'esfuerzo': {'a': {'orient': STAND, 'bones': SIT}, 'b': {'orient': STAND, 'bones': M(AD)}, 'props': ['chair']},
+    'sentado': {'a': {'orient': STAND, 'bones': SIT}, 'props': ['chair', 'mat']},
+    'depie': {'a': {'orient': STAND, 'bones': M(AD)}, 'props': ['mat']},
+    'esfuerzo': {'a': {'orient': STAND, 'bones': SIT}, 'b': {'orient': STAND, 'bones': M(AD)}, 'props': ['chair', 'mat']},
     'talon': {'a': {'orient': SUP, 'bones': M(AD, KB)}, 'b': {'orient': SUP, 'bones': M(AD, KB, {'upperleg01.L': (-4, 0, 0), 'lowerleg01.L': (4, 0, 0)})}, 'props': ['mat']},
     'apertura': {'a': {'orient': SUP, 'bones': M(AD, KB)}, 'b': {'orient': SUP, 'bones': M(AD, KB, {'upperleg01.L': (-55, 0, -42)})}, 'props': ['mat']},
     'puente': {'a': {'orient': SUP, 'bones': M(AD, KB)},
@@ -70,16 +71,16 @@ POSES = {
     'situp': {'a': {'orient': SUP, 'bones': M(KB, both('upperarm01', 150, 0, -25), both('lowerarm01', 130))},
               'b': {'orient': SUP, 'bones': M(KB, both('upperarm01', 150, 0, -25), both('lowerarm01', 130), {'spine04': (18, 0, 0), 'spine03': (18, 0, 0), 'spine02': (14, 0, 0), 'neck01': (20, 0, 0)})}, 'props': ['mat']},
     'sentadilla': {'a': {'orient': STAND, 'bones': M(both('upperarm01', 40, 0, -20), both('lowerarm01', 115))},
-                   'b': {'orient': STAND, 'bones': M(both('upperarm01', 55, 0, -20), both('lowerarm01', 115), {'spine03': (25, 0, 0)}, both('upperleg01', -95), both('lowerleg01', 105), both('foot', -15))}, 'props': ['dumbbell']},
+                   'b': {'orient': STAND, 'bones': M(both('upperarm01', 55, 0, -20), both('lowerarm01', 115), {'spine03': (25, 0, 0)}, both('upperleg01', -95), both('lowerleg01', 105), both('foot', -15))}, 'props': ['dumbbell', 'mat']},
     'rumano': {'a': {'orient': STAND, 'bones': M(both('upperarm01', 0, 0, -40), STR)},
-               'b': {'orient': (68, 0, 0), 'bones': M(both('upperarm01', 68, 0, -40), STR, both('upperleg01', -68), both('lowerleg01', 14))}, 'props': ['barbell']},
+               'b': {'orient': (68, 0, 0), 'bones': M(both('upperarm01', 68, 0, -40), STR, both('upperleg01', -68), both('lowerleg01', 14))}, 'props': ['barbell', 'mat']},
     'caminar': {'a': {'orient': STAND, 'bones': {'upperleg01.L': (-24, 0, 0), 'lowerleg01.L': (8, 0, 0), 'upperleg01.R': (16, 0, 0), 'lowerleg01.R': (22, 0, 0),
                                                  'upperarm01.L': (-22, 0, -40), 'upperarm01.R': (24, 0, 40), 'lowerarm01.L': (-10, 0, 0), 'lowerarm01.R': (30, 0, 0)}},
                 'b': {'orient': STAND, 'bones': {'upperleg01.R': (-24, 0, 0), 'lowerleg01.R': (8, 0, 0), 'upperleg01.L': (16, 0, 0), 'lowerleg01.L': (22, 0, 0),
-                                                 'upperarm01.R': (-22, 0, 40), 'upperarm01.L': (24, 0, -40), 'lowerarm01.R': (-10, 0, 0), 'lowerarm01.L': (30, 0, 0)}}},
+                                                 'upperarm01.R': (-22, 0, 40), 'upperarm01.L': (24, 0, -40), 'lowerarm01.R': (-10, 0, 0), 'lowerarm01.L': (30, 0, 0)}}, 'props': ['mat']},
     'tabla': {'a': {'orient': STAND, 'tilt': -4, 'bones': M(both('upperarm01', 0, 0, 38), STR, both('upperleg01', -20), both('lowerleg01', 30))},
-              'b': {'orient': STAND, 'tilt': 4, 'bones': M(both('upperarm01', 0, 0, 38), STR, both('upperleg01', -20), both('lowerleg01', 30))}, 'props': ['board']},
-    'unpie': {'a': {'orient': STAND, 'bones': M(AD)}, 'b': {'orient': STAND, 'bones': M(both('upperarm01', 0, 0, 20), STR, {'upperleg01.L': (-85, 0, 0), 'lowerleg01.L': (95, 0, 0)})}},
+              'b': {'orient': STAND, 'tilt': 4, 'bones': M(both('upperarm01', 0, 0, 38), STR, both('upperleg01', -20), both('lowerleg01', 30))}, 'props': ['board', 'mat']},
+    'unpie': {'a': {'orient': STAND, 'bones': M(AD)}, 'b': {'orient': STAND, 'bones': M(both('upperarm01', 0, 0, 20), STR, {'upperleg01.L': (-85, 0, 0), 'lowerleg01.L': (95, 0, 0)})}, 'props': ['mat']},
 }
 
 COL = {'eyes': (0.15, 0.12, 0.1, 1), 'skin': (0.86, 0.69, 0.58, 1), 'shirt': (0.05, 0.61, 0.56, 1), 'pants': (0.13, 0.17, 0.20, 1), 'shoes': (0.92, 0.92, 0.92, 1), 'hair': (0.16, 0.11, 0.08, 1)}
@@ -103,6 +104,27 @@ def find_mhclo(kind, name):
     raise FileNotFoundError(d)
 
 
+def material(name, col, rough=0.6, sss=0.0, sheen=0.0):
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    b = m.node_tree.nodes.get('Principled BSDF')
+    b.inputs['Base Color'].default_value = col
+    b.inputs['Roughness'].default_value = rough
+    if sss and 'Subsurface Weight' in b.inputs:
+        b.inputs['Subsurface Weight'].default_value = sss
+        b.inputs['Subsurface Radius'].default_value = (0.9, 0.45, 0.3)
+    if sheen and 'Sheen Weight' in b.inputs:
+        b.inputs['Sheen Weight'].default_value = sheen
+    return m
+
+
+def paint(o, col_key):
+    rough = {'skin': 0.48, 'hair': 0.42, 'eyes': 0.2, 'shoes': 0.55}.get(col_key, 0.78)
+    m = material('m_' + col_key, COL.get(col_key, (0.1, 0.1, 0.1, 1)), rough, 0.12 if col_key == 'skin' else 0.0, 0.3 if col_key in ('shirt', 'pants') else 0.0)
+    o.data.materials.clear()
+    o.data.materials.append(m)
+
+
 def build_human():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     macro = {"gender": 1.0 if SEX == 'h' else 0.0, "age": 0.5, "muscle": 0.6, "weight": 0.45, "height": 0.5,
@@ -110,6 +132,7 @@ def build_human():
     human = HumanService.create_human(macro_detail_dict=macro)
     rig = HumanService.add_builtin_rig(human, "default")
     human.color = COL['skin']
+    paint(human, 'skin')
     for kind, name, col in OUTFIT[SEX]:
         before = set(bpy.data.objects)
         try:
@@ -119,6 +142,8 @@ def build_human():
             continue
         for o in set(bpy.data.objects) - before:
             o.color = COL.get(col, (0.1, 0.1, 0.1, 1))
+            if o.type == 'MESH':
+                paint(o, col)
     return human, rig
 
 
@@ -167,18 +192,36 @@ def setup_scene():
     scn = bpy.context.scene
     cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
     scn.collection.objects.link(cam)
-    cam.rotation_euler = (D(90), 0, D(90))
     cam.data.type = 'ORTHO'
+    cam.rotation_euler = (D(90 - PITCH), 0, D(90 + YAW))
     scn.camera = cam
-    scn.render.engine = 'BLENDER_WORKBENCH'
-    sh = scn.display.shading
-    sh.light = 'STUDIO'
-    sh.color_type = 'OBJECT'
-    sh.show_cavity = True
-    sh.cavity_type = 'BOTH'
-    sh.show_object_outline = True
-    sh.object_outline_color = (0.08, 0.1, 0.11)
-    sh.show_shadows = False
+    scn.render.engine = 'BLENDER_EEVEE'
+    ev = scn.eevee
+    ev.taa_render_samples = 48
+    ev.use_shadows = True
+    ev.shadow_ray_count = 3
+    ev.shadow_step_count = 8
+    ev.use_raytracing = True
+    ev.use_fast_gi = True
+    scn.view_settings.view_transform = 'Standard'
+    scn.view_settings.look = 'None'
+    # luz ambiente suave
+    world = bpy.data.worlds.new('w')
+    world.use_nodes = True
+    bg = world.node_tree.nodes['Background']
+    bg.inputs['Color'].default_value = (0.82, 0.86, 0.88, 1)
+    bg.inputs['Strength'].default_value = 0.28
+    scn.world = world
+    # luz principal (área grande, sombra suave), relleno y contraluz
+    def area(name, energy, size, loc, rot, col=(1, 1, 1)):
+        L = bpy.data.lights.new(name, 'AREA')
+        L.energy, L.size, L.color = energy, size, col
+        o = bpy.data.objects.new(name, L)
+        o.location, o.rotation_euler = loc, [D(v) for v in rot]
+        scn.collection.objects.link(o)
+    area('key', 420, 2.4, (4.5, -3.0, 5.0), (40, 0, 55), (1, 0.97, 0.93))
+    area('fill', 90, 4.0, (4.0, 3.5, 2.0), (70, 0, 130), (0.9, 0.95, 1))
+    area('rim', 260, 1.6, (-4.0, 0.5, 4.0), (-45, 0, 95), (0.85, 1, 0.97))
     scn.render.resolution_x, scn.render.resolution_y = W, H
     scn.render.film_transparent = True
     scn.render.image_settings.file_format = 'PNG'
@@ -195,6 +238,7 @@ def box(name, size, loc, col, rot=(0, 0, 0)):
     o.name = name
     o.scale = size
     o.color = col
+    o.data.materials.append(material('p_' + name, col, 0.7))
     return o
 
 
@@ -203,6 +247,7 @@ def cyl(name, r, depth, loc, col, rot=(0, D(90), 0)):
     o = bpy.context.object
     o.name = name
     o.color = col
+    o.data.materials.append(material('p_' + name, col, 0.45))
     return o
 
 
@@ -269,20 +314,28 @@ def main():
         b = P.get('b', a)
         n = FRAMES if 'b' in P else 1
         poses = [lerp_pose(a, b, i / (n - 1)) if n > 1 else a for i in range(n)]
-        # encuadre común: caja de todos los cuadros
-        ys, zs = [], []
+        # encuadre común: caja de todos los cuadros, medida en el plano de la cámara
+        R = cam.rotation_euler.to_matrix()
+        Rt = R.transposed()
+        us, vs, ys = [], [], []
         for ps in poses:
             set_pose(rig, ps)
             snap_to_floor(rig, objs)
-            pts = mesh_points(objs)
-            ys += [p.y for p in pts]
-            zs += [p.z for p in pts]
-        if 'board' in P.get('props', []):
-            zs = [z + 0.09 for z in zs]
-        cy, cz = (min(ys) + max(ys)) / 2, (max(zs)) / 2
-        span = max(max(ys) - min(ys), (max(zs) - 0) * W / H) * 1.18
+            lift = 0.09 if 'board' in P.get('props', []) else 0.0
+            for p in mesh_points(objs):
+                q = Rt @ (p + Vector((0, 0, lift)))
+                us.append(q.x)
+                vs.append(q.y)
+                ys.append(p.y)
+        # incluye el piso bajo la figura para que la colchoneta quepa
+        for y in (min(ys) - 0.12, max(ys) + 0.12):
+            q = Rt @ Vector((0, y, 0))
+            us.append(q.x)
+            vs.append(q.y)
+        cu, cv = (min(us) + max(us)) / 2, (min(vs) + max(vs)) / 2
+        span = max(max(us) - min(us), (max(vs) - min(vs)) * W / H) * 1.14
         cam.data.ortho_scale = span
-        cam.location = (8, cy, max(zs) / 2 + span * H / W * 0.04)
+        cam.location = R @ Vector((cu, cv, 20))
         frames, pelv = [], []
         kinds = P.get('props', [])
         set_pose(rig, poses[0])

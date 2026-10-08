@@ -16,7 +16,7 @@ for sex in ('h', 'm'):
             im = Image.open(os.path.join(src, f'{pid}_{sex}_{i}.png')).convert('RGBA').resize((FW, FH), Image.LANCZOS)
             strip.paste(im, (FW * i, 0))
         f = os.path.join(out, f'{pid}_{sex}.webp')
-        strip.save(f, 'WEBP', quality=80, method=6)
+        strip.save(f, 'WEBP', quality=80, method=4)
         total += os.path.getsize(f)
         meta.setdefault(pid, {})[sex] = {'n': n, 'p': info['pelvis']}
 json.dump(meta, open(os.path.join(out, 'figs.json'), 'w'), separators=(',', ':'))
