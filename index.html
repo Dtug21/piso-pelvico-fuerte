@@ -322,7 +322,11 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
 @keyframes xf{0%,38%{opacity:0}50%,88%{opacity:1}100%{opacity:0}}
 .photo .tag{position:absolute;left:10px;bottom:10px;font-size:11px;font-weight:600;color:#fff;background:rgba(0,0,0,.45);padding:3px 8px;border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .thumb{width:44px;height:44px;border-radius:10px;object-fit:cover;flex:0 0 auto;max-width:none}
-.pphoto{width:min(84vw,380px)}
+.pphoto{width:min(84vw,380px);position:relative}
+.pelv{position:absolute;right:8px;bottom:8px;width:44%;border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.45);--surface2:#16211F;--faint:#6B7B7E;--ink:#E4EEEC;--muted:#9BB0AE;--accent:#2FD3C1;--warm:#FF9F45;--yellow:#F5C33B;--yellow-soft:rgba(245,195,59,.2);--red:#FF6369;--red-soft:rgba(255,99,105,.2)}
+.pelv svg,.pelvloop svg{display:block;width:100%;height:auto}
+.pelvcard{margin:12px 0 16px;background:var(--surface);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.pelvcard p{margin:0;padding:10px 14px 12px;font-size:14px;color:var(--muted)}
 .pphoto .photo{border-radius:18px}
 .stage.img{gap:12px}
 .stage.img .bring{width:min(44vw,190px);height:min(44vw,190px)}
@@ -552,8 +556,71 @@ function figSVG(P,o,second){
   s+='<text x="12" y="20" font-size="11" font-weight="700" fill="var(--faint)" font-family="-apple-system,Segoe UI,sans-serif" letter-spacing=".5">'+(o.a===o.b?(second&&o.k?'APRIETA':second&&o.br?'INHALA':'POSICIÓN'):(second?'2 · FINAL':'1 · INICIO'))+'</text>';
   return s+'</svg>';
 }
-function photo(k,tag){var o=FIGS[k];if(!o)return '';return '<div class="photo fig">'+figSVG(o.a,o,false)+'<div class="b">'+figSVG(o.b,o,true)+'</div>'+(tag?'<span class="tag">'+tag+'</span>':'')+'</div>'}
+function photo(k,tag){var o=FIGS[k];if(!o)return '';return '<div class="photo fig figloop" data-k="'+k+'"><svg viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">'+figLiveInner(o,0)+'</svg>'+(tag?'<span class="tag">'+tag+'</span>':'')+'</div>'}
 function thumb(k){var o=FIGS[k];return '<span class="thumb fig">'+figSVG(o.b,o,true)+'</span>'}
+/* ---------- Animación: la figura se mueve entre inicio y final (t de 0 a 1) ---------- */
+function easeIO(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
+var JOINTS=['h','n','p','k','f','e','w','k2','f2','e2','w2'];
+function lerpP(A,B,t){var r={};JOINTS.forEach(function(j){var a=A[j],b=B[j];if(a&&b)r[j]=[+(a[0]+(b[0]-a[0])*t).toFixed(1),+(a[1]+(b[1]-a[1])*t).toFixed(1)];else if(a||b)r[j]=a||b});return r}
+function figLiveInner(o,t){
+  var P=o.a===o.b?o.a:lerpP(o.a,o.b,t);
+  var s='<rect width="240" height="160" fill="var(--surface2)"/><ellipse cx="'+P.p[0]+'" cy="141" rx="70" ry="4" fill="var(--fig)" opacity=".07"/><line x1="0" y1="140.5" x2="240" y2="140.5" stroke="var(--sep)" stroke-width="1.5"/>';
+  s+=((t>.5?(o.prb||o.pr):(o.pra||o.pr))||'');
+  s+=figBody(P,'var(--fig)');
+  if(o.wt){var c=o.wt==='hip'?[P.p[0],P.p[1]-14]:P.w;s+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="9.5" fill="var(--warm)"/><circle cx="'+c[0]+'" cy="'+c[1]+'" r="3.5" fill="var(--surface2)"/>'}
+  if(o.br){var mx=(P.n[0]+P.p[0])/2,my=(P.n[1]+P.p[1])/2,lift=10+16*t;s+='<path d="M'+(mx-18)+' '+(my-12)+' Q'+mx+' '+(my-lift-6)+' '+(mx+18)+' '+(my-12)+'" stroke="var(--accent)" stroke-width="4" fill="none" stroke-linecap="round" opacity="'+(.25+.75*t).toFixed(2)+'"/>'}
+  if(o.k){var g=t.toFixed(2);s+='<circle cx="'+P.p[0]+'" cy="'+P.p[1]+'" r="'+(10+9*t).toFixed(1)+'" fill="var(--accent)" opacity="'+(.28*t).toFixed(2)+'"/><circle cx="'+P.p[0]+'" cy="'+P.p[1]+'" r="'+(4.5+2.5*t).toFixed(1)+'" fill="var(--accent)" stroke="var(--surface2)" stroke-width="2" opacity="'+(.35+.65*t).toFixed(2)+'"/>'}
+  return s;
+}
+
+/* ---------- Corte de la pelvis por dentro (vista lateral, adelante a la izquierda) ----------
+   l: 1 = aprieta (el piso pélvico sube y cierra), 0 = reposo, -0.6 = dejar caer (baja y se abre). */
+function pelvisSVG(sex,l){
+  var up=Math.max(0,l),dn=Math.max(0,-l),dy=(-7*l).toFixed(1);
+  var P0=[52,92],P2=[140,104],cy=126-30*l,P1=[96,cy];
+  var hy=function(x){var t=(x-P0[0])/(P2[0]-P0[0]);return (1-t)*(1-t)*P0[1]+2*(1-t)*t*P1[1]+t*t*P2[1]};
+  var col=up>0?'var(--accent)':'var(--accent)';
+  var s='<svg viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Corte de la pelvis: el piso pélvico '+(l>.3?'sube y cierra al apretar':l<-.2?'baja y se abre al soltar':'en reposo')+'"><rect width="200" height="150" fill="var(--surface2)"/>';
+  // huesos: pubis adelante, sacro y cóccix atrás
+  s+='<ellipse cx="50" cy="78" rx="8" ry="15" transform="rotate(-18 50 78)" fill="var(--faint)" opacity=".75"/>';
+  s+='<path d="M156 14 C176 46 172 86 142 104" stroke="var(--faint)" stroke-width="13" fill="none" stroke-linecap="round" opacity=".75"/>';
+  // órganos (suben con el piso pélvico)
+  s+='<g transform="translate(0 '+dy+')">';
+  s+='<path d="M136 22 Q130 62 '+(120)+' '+(hy(120)+7*l-2).toFixed(1)+'" stroke="#B07A5A" stroke-width="13" fill="none" stroke-linecap="round" opacity=".45"/>';
+  if(sex==='m'){s+='<path d="M98 34 C112 34 114 60 104 70 L100 '+(hy(96)+7*l-2).toFixed(1)+' L94 '+(hy(96)+7*l-2).toFixed(1)+' L92 70 C82 60 84 34 98 34 Z" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.5" opacity=".9"/>'}
+  s+='<ellipse cx="72" cy="58" rx="20" ry="16" fill="var(--yellow-soft)" stroke="var(--yellow)" stroke-width="1.5"/>';
+  if(sex==='h')s+='<ellipse cx="70" cy="80" rx="9" ry="6" fill="var(--yellow-soft)" stroke="var(--faint)" stroke-width="1.2"/>';
+  s+='<path d="M70 74 L66 '+(hy(66)+7*l).toFixed(1)+'" stroke="var(--yellow)" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  s+='</g>';
+  // genitales externos (hombre): base del pene y testículos, que suben al apretar
+  if(sex==='h'){s+='<path d="M58 '+(hy(58)+2).toFixed(1)+' C46 104 34 108 22 116" stroke="var(--faint)" stroke-width="10" fill="none" stroke-linecap="round" opacity=".8"/><circle cx="44" cy="'+(126-9*up+4*dn).toFixed(1)+'" r="9" fill="var(--faint)" opacity=".8"/>'}
+  // el piso pélvico: hamaca de músculo
+  var d='M'+P0[0]+' '+P0[1]+' Q'+P1[0]+' '+P1[1].toFixed(1)+' '+P2[0]+' '+P2[1];
+  s+='<path d="'+d+'" stroke="'+col+'" stroke-width="16" fill="none" stroke-linecap="round" opacity="'+(.12+.2*up).toFixed(2)+'"/>';
+  s+='<path d="'+d+'" stroke="'+col+'" stroke-width="7" fill="none" stroke-linecap="round" opacity="'+(.6+.4*up).toFixed(2)+'"/>';
+  // aberturas que se cierran al apretar: uretra, vagina (mujer) y ano
+  var holes=sex==='m'?[66,96,120]:[66,120];
+  holes.forEach(function(x){var y=hy(x),w=(5.5-3.5*up+2.5*dn).toFixed(1);s+='<ellipse cx="'+x+'" cy="'+y.toFixed(1)+'" rx="'+w+'" ry="2.6" fill="var(--surface2)" stroke="var(--ink)" stroke-opacity=".35" stroke-width="1"/>'});
+  // flechas
+  if(up>.25)[84,110].forEach(function(x){var y=hy(x)+16;s+='<path d="M'+x+' '+(y+10)+' V'+y+' M'+(x-5)+' '+(y+5)+' L'+x+' '+y+' L'+(x+5)+' '+(y+5)+'" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="'+up.toFixed(2)+'"/>'});
+  if(dn>.15)[84,110].forEach(function(x){var y=hy(x)+8;s+='<path d="M'+x+' '+y+' V'+(y+10)+' M'+(x-5)+' '+(y+5)+' L'+x+' '+(y+10)+' L'+(x+5)+' '+(y+5)+'" stroke="var(--warm)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="'+Math.min(1,dn*1.6).toFixed(2)+'"/>'});
+  // textos
+  var st=l>.3?'APRIETA · SUBE Y CIERRA':l<-.2?'SUELTA · BAJA Y SE ABRE':'REPOSO';
+  s+='<text x="10" y="16" font-size="9.5" font-weight="700" fill="'+(l>.3?'var(--accent)':l<-.2?'var(--warm)':'var(--muted)')+'" font-family="-apple-system,Segoe UI,sans-serif" letter-spacing=".4">'+st+'</text>';
+  s+='<text x="72" y="'+(61-7*l).toFixed(1)+'" font-size="7.5" text-anchor="middle" fill="var(--ink)" opacity=".6" font-family="-apple-system,Segoe UI,sans-serif">Vejiga</text>';
+  s+='<text x="10" y="143" font-size="8" fill="var(--muted)" font-family="-apple-system,Segoe UI,sans-serif">Piso pélvico · adelante ←</text>';
+  return s+'</svg>';
+}
+
+/* ---------- Bucle para figuras y cortes fuera del reproductor (fichas, evaluación) ---------- */
+var LOOP_T0=performance.now(),REDUCE=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function loopT(){var ph=((performance.now()-LOOP_T0)/1000)%4.6;return ph<.9?0:ph<2.1?easeIO((ph-.9)/1.2):ph<3.4?1:1-easeIO((ph-3.4)/1.2)}
+(function loopTick(){
+  var t=REDUCE?1:loopT(),key=Math.round(t*120);
+  var a=document.getElementsByClassName('figloop');for(var i=0;i<a.length;i++){var el=a[i];if(!el.offsetParent||el._k===key)continue;var o=FIGS[el.getAttribute('data-k')],svg=el.querySelector('svg');if(o&&svg){svg.innerHTML=figLiveInner(o,t);el._k=key}}
+  var b=document.getElementsByClassName('pelvloop');for(var j=0;j<b.length;j++){var pe=b[j];if(!pe.offsetParent||pe._k===key)continue;pe.innerHTML=pelvisSVG(pe.getAttribute('data-sex'),pe.getAttribute('data-mode')==='drop'?-.6*t:t);pe._k=key}
+  requestAnimationFrame(loopTick)})();
+function pelvCard(sex,mode,cap){return '<div class="pelvcard"><div class="pelvloop" data-sex="'+sex+'" data-mode="'+(mode||'sq')+'">'+pelvisSVG(sex,0)+'</div>'+(cap?'<p>'+cap+'</p>':'')+'</div>'}
 
 function fmt(s){return s.toFixed(1).replace('.',',')}
 function haptic(p){try{if(navigator.vibrate)navigator.vibrate(p||10)}catch(e){}}
@@ -1011,7 +1078,7 @@ function renderStep(){
   W=wizSteps();var s=W[wi],b=$('#wizBody'),h='',fem=A.sex===2,side=fem&&A.stage===2;
   $('#wizBar').style.width=(100*wi/(W.length-1))+'%';$('#wizN').textContent=s.k==='result'?'':(wi+1)+'/'+(W.length-1);
   $('#wizBack').style.visibility=wi>0&&s.k!=='result'?'visible':'hidden';
-  if(s.k==='intro')h='<div class="step"><div class="k">Antes de empezar</div><h2>Encuentra el músculo</h2><p class="d">'+(side?'Acuéstate de lado con las rodillas dobladas':'Acuéstate boca arriba con las rodillas dobladas')+' y la vejiga vacía, como en la figura.</p><div style="margin-bottom:16px">'+photo(side?'delado':'acostado','Aprieta: se marca el piso pélvico')+'</div><div class="group">'+row('hold','#0E9C8F','Aprieta',fem?'Como si cortaras el chorro de orina y subieras la vagina hacia adentro':'Como si cortaras el chorro de orina y subieras los testículos')+row('alert','#E07A1F','Sin trampas','Glúteos, abdomen y muslos quietos. No aguantes la respiración.')+row('wind','#4DB6AC','Suelta','Relajar del todo cuenta tanto como apretar')+'</div><p class="foot">Son 3 pruebas cronometradas, 4 preguntas sobre cómo se siente la contracción y los cuestionarios de tus objetivos.</p></div>';
+  if(s.k==='intro')h='<div class="step"><div class="k">Antes de empezar</div><h2>Encuentra el músculo</h2><p class="d">'+(side?'Acuéstate de lado con las rodillas dobladas':'Acuéstate boca arriba con las rodillas dobladas')+' y la vejiga vacía, como en la figura.</p><div style="margin-bottom:16px">'+photo(side?'delado':'acostado','Aprieta: se marca el piso pélvico')+pelvCard(fem?'m':'h','sq','Por dentro: al apretar, el piso pélvico sube como una hamaca y cierra '+(fem?'la uretra, la vagina y el ano':'la uretra y el ano, y sube los testículos')+'. Al soltar, vuelve a bajar.')+'</div><div class="group">'+row('hold','#0E9C8F','Aprieta',fem?'Como si cortaras el chorro de orina y subieras la vagina hacia adentro':'Como si cortaras el chorro de orina y subieras los testículos')+row('alert','#E07A1F','Sin trampas','Glúteos, abdomen y muslos quietos. No aguantes la respiración.')+row('wind','#4DB6AC','Suelta','Relajar del todo cuenta tanto como apretar')+'</div><p class="foot">Son 3 pruebas cronometradas, 4 preguntas sobre cómo se siente la contracción y los cuestionarios de tus objetivos.</p></div>';
   else if(s.k==='hold')h='<div class="step"><div class="k">Prueba 1 · Fuerza sostenida · '+cites('laycock01')+'</div><h2>¿Cuánto aguantas apretando al máximo?</h2><p class="d">Mantén el dedo en el botón mientras aprietas el músculo. Levanta el dedo en cuanto la fuerza baje. Haz 2 o 3 intentos, con 30 s de descanso entre cada uno.</p><div class="sw"><div class="clock num" id="clock">0,0</div><button class="holdbtn" id="swGo" aria-label="Mantén presionado mientras aprietas"><span id="hbTxt">Mantén presionado</span><small id="hbSub">y suelta cuando pierdas fuerza</small></button><button class="back" id="swReset">Borrar intentos</button></div><div class="group plain laps" id="laps"></div></div>';
   else if(s.k==='fast')h='<div class="step"><div class="k">Prueba 2 · Velocidad · '+cites('laycock01')+'</div><h2>¿Cuántas rápidas haces en 10 s?</h2><p class="d">Aprieta y suelta del todo cada vez. Cuéntalas en voz baja. El cronómetro te avisa con un pitido al empezar y al terminar.</p><div class="cd" id="cd"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--sep)" stroke-width="8"/><circle id="cdArc" cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><div class="in num" id="cdN">10</div></div><button class="btn sec press" id="cdGo" style="margin-top:14px">Iniciar 10 s</button><div class="hdr" style="text-align:center;margin-left:0">¿Cuántas hiciste?</div>'+stepper('fast',40)+'</div>';
   else if(s.type==='num')h='<div class="step"><div class="k">'+s.tag+(s.src?' · '+cites(s.src):'')+'</div><h2>'+s.q+'</h2><p class="d">'+s.d+'</p>'+stepper(s.k,s.max)+'</div>';
@@ -1099,7 +1166,7 @@ function computeResult(){
 var steps=[],slot=0,timer=null,paused=true,started=false,idx=0,stepEnd=0,remain=0,lastIdx=-1,C2=339.3;
 function openPlayer(s){
   if(timer&&slot===s){openOv($('#player'));return}
-  stopRun();slot=s;var ab=s==='abs';steps=ab?buildAbs(st.level):build(st.level,s);
+  stopRun();slot=s;LT=0;LL=0;lastNow=0;lastImg=null;var ab=s==='abs';steps=ab?buildAbs(st.level):build(st.level,s);
   $('#plTitle').textContent=(ab?'Abdomen '+absFor(st.level).n.toLowerCase():SLOTS[s][0])+' · Nivel '+st.level;
   $('#plRun').hidden=false;$('#plDone').hidden=true;
   setPhoto(steps[1]&&steps[1].img||'');$('#ph').textContent='Listo';$('#sec').textContent=mmss(total(steps));$('#info').textContent=ab?absFor(st.level).ex.length+' ejercicios':LV[st.level].pos[Math.min(s,LV[st.level].pos.length-1)];
@@ -1110,7 +1177,17 @@ function openPlayer(s){
 function setIcon(n){$('#plIcon').setAttribute('href','#i-'+n);$('#plPlay').setAttribute('aria-label',n==='play'?'Iniciar':'Pausa')}
 function isSqueeze(p){return p==='Aprieta'||p==='Rápido'||p==='Trabaja'}
 var lastImg=null;
-function setPhoto(k){if(k===lastImg)return;lastImg=k;$('#pphoto').innerHTML=photo(k);$('#pphoto').hidden=!k;$('#stage').classList.toggle('img',!!k)}
+var LT=0,LL=0,lastNow=0,lastTk=-9,lastL=-9,liveDirty=true;
+function setPhoto(k){if(k===lastImg)return;lastImg=k;var pv=k&&slot!=='abs';
+  $('#pphoto').innerHTML=k?'<div class="photo fig"><svg id="figLive" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg">'+figLiveInner(FIGS[k],LT)+'</svg></div>'+(pv?'<div class="pelv" id="pelvLive">'+pelvisSVG(isM()?'m':'h',LL)+'</div>':''):'';
+  $('#pphoto').hidden=!k;$('#stage').classList.toggle('img',!!k);liveDirty=true}
+/* Cada cuadro: la figura y el piso pélvico siguen la fase con una curva suave (no saltan) */
+function liveFrame(s){var now=performance.now(),dt=Math.min(.1,lastNow?(now-lastNow)/1000:0);lastNow=now;
+  var sq=isSqueeze(s.p),tgt=sq?1:0,ltg=sq?(s.b==='Suaves'?.55:1):(s.b==='Dejar caer'&&s.p==='Relaja'?-.6:0);
+  var k=REDUCE?1:1-Math.exp(-dt/(s.t<=1?.09:.3));LT+=(tgt-LT)*k;LL+=(ltg-LL)*k;
+  var o=FIGS[s.img],svg=document.getElementById('figLive');if(o&&svg&&(liveDirty||Math.abs(LT-lastTk)>.004)){svg.innerHTML=figLiveInner(o,LT);lastTk=LT}
+  var pv=document.getElementById('pelvLive');if(pv&&(liveDirty||Math.abs(LL-lastL)>.004)){pv.innerHTML=pelvisSVG(isM()?'m':'h',LL);lastL=LL}
+  liveDirty=false}
 var dIdx=-1,dSec=null,dTot=0,dBefore=0,ARC=null,KNOB=null,TRACK=null;
 function draw(left){
   var s=steps[idx];
@@ -1129,6 +1206,7 @@ function draw(left){
   ARC.style.strokeDashoffset=(C2*(1-f)).toFixed(2);
   var a=2*Math.PI*f;KNOB.setAttribute('cx',(60+54*Math.cos(a)).toFixed(2));KNOB.setAttribute('cy',(60+54*Math.sin(a)).toFixed(2));
   TRACK.style.width=(100*(dBefore+(s.t-left))/dTot).toFixed(2)+'%';
+  liveFrame(s);
 }
 function enterStep(){var s=steps[idx],sq=isSqueeze(s.p),orb=$('#orb');
   orb.style.setProperty('--c',sq?'#2FD3C1':'#FF9F45');orb.style.transitionDuration=Math.min(s.t,1.2)+'s';orb.style.transform=sq?'scale(1.15)':s.p==='Suelta'?'scale(.6)':'scale(.85)';
@@ -1186,7 +1264,7 @@ function renderEx(){
   var list=EX.filter(function(x){return (!x.sx||x.sx===(isM()?'m':'h'))&&(cat==='Todos'||x.g===cat)});$('#exHdr').textContent=cat+' · '+list.length;
   $('#exList').innerHTML=list.map(function(x){return '<button class="rowi" data-n="'+EX.indexOf(x)+'">'+(x.img?thumb(x.img):'<span class="ic" style="background:'+x.c+';width:44px;height:44px;border-radius:10px">'+ico(x.i)+'</span>')+'<div class="t"><b>'+x.n+'</b><span>'+x.g+'</span></div><span class="pill '+x.e+'">'+EVN[x.e]+'</span><svg class="i chev"><use href="#i-chev"/></svg></button>'}).join('');
   $$('#exList .rowi').forEach(function(r){r.onclick=function(){var x=EX[+r.getAttribute('data-n')];haptic(6);
-    openSheet('<div class="detail">'+(x.img?photo(x.img,x.e==='c'?'Así no':'Inicio → final'):'<span class="ic" style="background:'+x.c+';width:52px;height:52px;border-radius:14px">'+ico(x.i)+'</span>')+'<h2>'+x.n+'</h2><div style="margin-bottom:12px"><span class="pill '+x.e+'">Evidencia '+EVN[x.e].toLowerCase()+'</span></div><p>'+x.d+'</p><div class="hdr" style="margin-left:0">Cómo hacerlo</div><ol>'+x.h.map(function(i){return '<li>'+i+'</li>'}).join('')+'</ol>'+(x.src?'<div class="hdr" style="margin-left:0">Fuentes</div><p>'+cites(x.src)+'</p>':(x.e==='c'?'':'<p class="foot" style="margin:10px 0 0">Sin ensayos propios en piso pélvico: se incluye por su base fisiológica.</p>'))+'<button class="btn sec press" id="shClose" style="margin-top:18px">Listo</button></div>');$('#shClose').onclick=closeSheet}})
+    openSheet('<div class="detail">'+(x.img?photo(x.img,x.e==='c'?'Así no':'Inicio → final'):'<span class="ic" style="background:'+x.c+';width:52px;height:52px;border-radius:14px">'+ico(x.i)+'</span>')+(x.g==='Kegel'&&x.sx!=='h_'?pelvCard(isM()?'m':'h',/Dejar caer/.test(x.n)?'drop':'sq',/Dejar caer/.test(x.n)?'Por dentro: al inhalar, el piso pélvico baja y se abre, sin empujar.':'Por dentro: el piso pélvico sube y cierra las aberturas.'):'')+'<h2>'+x.n+'</h2><div style="margin-bottom:12px"><span class="pill '+x.e+'">Evidencia '+EVN[x.e].toLowerCase()+'</span></div><p>'+x.d+'</p><div class="hdr" style="margin-left:0">Cómo hacerlo</div><ol>'+x.h.map(function(i){return '<li>'+i+'</li>'}).join('')+'</ol>'+(x.src?'<div class="hdr" style="margin-left:0">Fuentes</div><p>'+cites(x.src)+'</p>':(x.e==='c'?'':'<p class="foot" style="margin:10px 0 0">Sin ensayos propios en piso pélvico: se incluye por su base fisiológica.</p>'))+'<button class="btn sec press" id="shClose" style="margin-top:18px">Listo</button></div>');$('#shClose').onclick=closeSheet}})
 }
 
 /* ---------- Nutrición y ciencia ---------- */
